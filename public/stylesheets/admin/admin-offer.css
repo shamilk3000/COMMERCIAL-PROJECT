@@ -1,0 +1,41 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+main {
+  flex: 1;
+}
+.table-container {
+  height: 330px;
+  overflow-y: auto;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.btn-group-status {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.btn-status {
+  flex: 1;
+  border: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+.btn-status.active {
+  background-color: limegreen;
+  color: white;
+}
+.btn-status.block {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-status.inactive {
+  background-color: white;
+  color: gray;
+}

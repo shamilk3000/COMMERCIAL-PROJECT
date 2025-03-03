@@ -1,0 +1,38 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+main {
+  flex: 1;
+}
+.table-container {
+  height: 325px;
+  overflow-y: auto;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.btnd {
+  padding: 10px 15px;
+  font-size: 16px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+}
+
+.btnd:hover {
+  background-color: #0056b3;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: black;
+  border-color: black;
+}

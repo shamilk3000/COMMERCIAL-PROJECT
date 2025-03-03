@@ -1,0 +1,261 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/admin/admin-userManagement.css">
+</head>
+<header class="bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light container">
+        <a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/logOut">LogOut</a></li>
+            </ul>
+        </div>
+
+    </nav>
+</header>
+
+<div class="container-fluid ">
+    <div class="row">
+
+        <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+            <div class="list-group list-group-flush">
+                <a href="/admin" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="/admin/userManagement" class="list-group-item list-group-item-action active"
+                    aria-current="true">Users</a>
+                <a href="/admin/category" class="list-group-item list-group-item-action">Categories</a>
+                <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+                <a href="/admin/productManagement" class="list-group-item list-group-item-action">Products</a>
+                <a href="/admin/orderManagement" class="list-group-item list-group-item-action ">Orders</a>
+                <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+            </div>
+        </div>
+
+        <main class="col-md-10 col-lg-11">
+            <div class="pt-4 pb-0 ps-3">
+                <h2>Users</h2>
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item "><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Users List</li>
+                </ol>
+            </div>
+
+            <div id="liveAlertPlaceholder"></div>
+            <div class=" container-fluid ">
+                <div class="row  ">
+                    <div class=" d-flex justify-content-between align-items-center ">
+
+                        <div class="col-5">
+                            <a href="/admin/userManagement"><button class="btn btn-danger" id="allBtn">All</button></a>
+                            <a href="/admin/active"><button class="btn btn-light" id="activeBtn">Active</button></a>
+                            <a href="/admin/block"><button class="btn btn-light" id="blockedBtn">Blocked</button></a>
+                        </div>
+
+                        <form class="d-flex flex-column pb-3 col-5" role="search" action="/admin/search" method="post">
+                            <label for="Search" class="form-label text-black">Search</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex col-9">
+                                    <input class="form-control me-2" type="search" placeholder="{{searchText}}"
+                                        aria-label="Search" id="Search" name="search">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class=" d-flex justify-content-end col-2">
+                            <a style="text-decoration: none;" href="/admin/addUser"><button class="btn btn-danger">+ Add
+                                    User</button></a>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center" scope="col">No</th>
+                            <th class="text-center" scope="col">Username</th>
+                            <th class="text-center" scope="col">Name</th>
+                            <th class="text-center" scope="col">Email</th>
+                            <th class="text-center" scope="col ">Status</th>
+                            <th class="text-center" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each users}}
+                        <tr>
+                            <td class="align-middle text-center" scope="row">{{increment @index}}</td>
+                            <td class="align-middle text-center">{{this.username}}</td>
+                            <td class="align-middle text-center">{{this.firstName}} {{this.lastName}}</td>
+                            <td class="align-middle text-center">{{this.email}}</td>
+                            <td class="align-middle text-center">{{#if this.isActive}}
+                                <span class="badge bg-success mt-2">Active</span>
+                                {{else}}
+                                <span class="badge bg-danger mt-2">Blocked</span>
+                                {{/if}}
+                            </td>
+                            <td class="align-middle text-center">
+                                <div class="d-flex justify-content-center gap-2 align-items-center">
+                                    <form method="post" action="/admin/editUser" class="mb-0">
+                                        <input hidden type="email" class="form-control" id="email" name="email"
+                                            placeholder="Email" value="{{this.email}}" hidden>
+                                        <button class="btn btn-warning" type="submit">Edit</button>
+                                    </form>
+                                    <div>
+                                        <button class="btn btn-info " data-bs-toggle="modal" data-bs-target="#viewUser"
+                                            onclick="view('{{this.firstName}}','{{this.lastName }}', '{{this.username}}', '{{this.email}}', '{{this.phoneNumber}}', '{{this.isActive}}', '{{this.createdAt}}', '{{this.updatedAt}}', '{{this.updatedBy}}')">
+                                            View
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-danger " data-bs-toggle="modal"
+                                            data-bs-target="#deleteUser"
+                                            onclick="deleteUser('{{this.username}}','{{this.email}}')">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{!-- <div class="mt-auto">
+                <nav aria-label="Page navigation ">
+                    <ul class="pagination ">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div> --}}
+        </main>
+    </div>
+</div>
+
+<div class="form-text text-danger" hidden>
+    <h1 id="warning">{{warning}}</h1>
+    <h1 id="searchresult">{{searchresult}}</h1>
+    <h1 id="type">{{type}}</h1>
+    <h1 id="button">{{button}}</h1>
+</div>
+
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <p>SML Bazaar</p>
+            </div>
+            <div class="col-md-6">
+                <p>Any questions? Let us know at<br> Office of Manapuram, Kerala, India<br> 9846482463</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- viewUser -->
+<div class="modal fade" id="viewUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">View User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3 ">
+                        <form>
+                            <div class="mb-3">
+                                <label for="viewname" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="viewname" placeholder="Not Added"
+                                    name="Name" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="viewusername" placeholder="Not Added"
+                                    name="Username" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="viewemail" placeholder="Not Added"
+                                    name="Email" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="number" class="form-control" id="viewphoneNumber" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <input type="text" class="form-control" id="viewstatus" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="createdAt" class="form-label">Created At</label>
+                                <input type="text" class="form-control" id="viewcreatedAt" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Updated At</label>
+                                <input type="text" class="form-control" id="viewupdatedAt" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Updated By</label>
+                                <input type="text" class="form-control" id="viewupdatedBy" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- deleteUser -->
+<div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/deleteUser" method="post">
+                    <div class="mb-3 ">
+                        <input type="text" class="form-control" id="deleteEmail" placeholder="email" name="email"
+                            hidden>
+                        <input type="text" class="form-control" id="deleteUsernamePost" placeholder="username"
+                            name="username" hidden>
+                        <h6 class="lh-lg">Are you sure you want to delete user account " <span style="display: inline;">
+                                <h6 id="deleteUsername" style="display: inline;"></h6>
+                            </span> "</h6>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-userManagement.js"></script>

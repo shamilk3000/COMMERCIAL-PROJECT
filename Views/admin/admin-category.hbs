@@ -1,0 +1,247 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/admin/admin-category.css">
+</head>
+<header class="bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light container">
+        <a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/logOut">LogOut</a></li>
+            </ul>
+        </div>
+
+    </nav>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+            <div class="list-group list-group-flush">
+                <a href="/admin" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="/admin/userManagement" class="list-group-item list-group-item-action">Users</a>
+                <a href="/admin/category" class="list-group-item list-group-item-action active"
+                    aria-current="true">Categories</a>
+                <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+                <a href="/admin/productManagement" class="list-group-item list-group-item-action">Products</a>
+                <a href="/admin/orderManagement" class="list-group-item list-group-item-action ">Orders</a>
+                <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+            </div>
+        </div>
+
+        <main class="col-md-10 col-lg-11">
+            <div class="pt-3 pb-0 ps-3">
+                <h2>Categories</h2>
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item "><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Category List</li>
+                </ol>
+            </div>
+
+            <div id="liveAlertPlaceholder"></div>
+            <div class="container-fluid">
+                <div class="row ">
+                    <div class="mb-0 d-flex justify-content-between align-items-center ">
+                        <div class="col-6"></div>
+                        <form class="d-flex flex-column pb-3 col-4" role="search" action="/admin/categorySearch"
+                            method="post">
+                            <label for="Search" class="form-label text-black">Search</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex col-10">
+                                    <input class="form-control me-2 " type="search" placeholder="{{searchText}}"
+                                        aria-label="Search" id="Search" name="search">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class=" d-flex justify-content-end col-2">
+                            <a style="text-decoration: none;" href="/admin/addCategory"><button class="btn btn-danger">+
+                                    Add Category</button></a>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center" scope="col">No</th>
+                            <th class="text-center" scope="col">Category Name</th>
+                            <th class="text-center" scope="col">Offer</th>
+                            <th class="text-center" scope="col">Total Products</th>
+                            <th class="text-center" scope="col">Created By</th>
+                            <th class="text-center" scope="col">Added</th>
+                            <th class="text-center" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each category}}
+                        <tr>
+                            <td class="align-middle text-center" scope="row">{{increment @index}}</td>
+                            <td class="align-middle text-center">{{this.categoryName}}</td>
+                            <td class="align-middle text-center">{{this.offer}}%</td>
+                            <td class="align-middle text-center">{{this.productCount}}</td>
+                            <td class="align-middle text-center">{{this.createdBy}}</td>
+                            <td class="align-middle text-center">{{this.createdAt}}</td>
+                            <td class="align-middle text-center">
+                                <div class="d-flex justify-content-center gap-2 align-items-center">
+                                    <form method="post" action="/admin/editCategory" class="mb-0">
+                                        <input hidden type="text" class="form-control" id="editcategoryName"
+                                            name="categoryName" placeholder="Category Name"
+                                            value="{{this.categoryName}}" hidden>
+                                        <button class="btn btn-warning" type="submit">Edit</button>
+                                    </form>
+                                    <div>
+                                        <button class="btn btn-info " data-bs-toggle="modal" data-bs-target="#viewUser"
+                                            onclick="view('{{this.categoryName}}','{{this.description }}', '{{this.createdBy}}', '{{this.createdAt}}', '{{this.updatedBy}}', '{{this.updatedAt}}', '{{this.productCount}}', '{{this.offer}}')">
+                                            View
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-danger " data-bs-toggle="modal"
+                                            data-bs-target="#deleteUser"
+                                            onclick="deleteUser('{{this.categoryName}}','{{this.productCount}}','{{this.isDeleted}}')">
+                                            {{#if this.isDeleted}} Restore {{else}} Delete {{/if}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<div class="form-text text-danger" hidden>
+    <h1 id="warning">{{warning}}</h1>
+    <h1 id="searchresult">{{searchresult}}</h1>
+    <h1 id="type">{{type}}</h1>
+    <h1 id="button">{{button}}</h1>
+    <h1 id="info">{{info}}</h1>
+</div>
+
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <p>SML Bazaar</p>
+            </div>
+            <div class="col-md-6">
+                <p>Any questions? Let us know at<br> Office of Manapuram, Kerala, India<br> 9846482463</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- viewUser -->
+<div class="modal fade" id="viewUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">View Category</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3 ">
+                        <form>
+                            <div class="mb-3">
+                                <label for="categoryName" class="form-label">Category Name</label>
+                                <input type="text" class="form-control" id="categoryName" placeholder="Not Added"
+                                    name="categoryName" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="categoryName" class="form-label">Total Products</label>
+                                <input type="text" class="form-control" id="total" placeholder="Not Added" name="total"
+                                    disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="offer" class="form-label">Offer</label>
+                                <input type="text" class="form-control" id="offer" placeholder="Not Added" name="offer"
+                                    disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" class="form-control" rows="4"
+                                    placeholder="Type category description here..." name="description"
+                                    disabled></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="createdBy" class="form-label">Created By</label>
+                                <input type="text" class="form-control" id="createdBy" placeholder="Not Added"
+                                    name="createdBy" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="createdAt" class="form-label">Created At</label>
+                                <input type="text" class="form-control" id="createdAt" placeholder="Not Added"
+                                    name="createdAt" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedBy" class="form-label">Updated By</label>
+                                <input type="text" class="form-control" id="updatedBy" placeholder="Not Added"
+                                    name="updatedBy" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Updated At</label>
+                                <input type="text" class="form-control" id="updatedAt" placeholder="Not Added"
+                                    name="updatedAt" disabled>
+                            </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- deleteUser -->
+
+<div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteHed"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/deleteCategory" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="productCount" placeholder="productCount"
+                            name="productCount" hidden>
+                        <input type="text" class="form-control" id="deletecategoryName" placeholder="categoryName"
+                            name="categoryName" hidden>
+                        <div id="warningText">
+
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" id="deleteButtontext"></button></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-category.js"></script>

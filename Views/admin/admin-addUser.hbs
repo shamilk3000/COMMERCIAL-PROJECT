@@ -1,0 +1,184 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+  <div class="container">
+    <a class="navbar-brand ms-5 py-0 my-0" href="#"><img
+        src="http://127.0.0.1:5000/images/user/logo.webp"
+        width="100px"
+        alt=""
+      /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a
+            class="nav-link"
+            href="/admin/logOut"
+          >LogOut</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+      <div class="list-group list-group-flush">
+        <a
+          href="/admin"
+          class="list-group-item list-group-item-action"
+        >Dashboard</a>
+        <a
+          href="/admin/userManagement"
+          class="list-group-item list-group-item-action active"
+          aria-current="true"
+        >Users</a>
+        <a
+          href="/admin/category"
+          class="list-group-item list-group-item-action"
+        >Categories</a>
+        <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+        <a
+          href="/admin/productManagement"
+          class="list-group-item list-group-item-action"
+        >Products</a>
+        <a
+          href="/admin/logOut"
+          class="list-group-item list-group-item-action"
+        >LogOut</a>
+      </div>
+    </div>
+
+    <div class="col-md-10 col-lg-11 py-4">
+
+      <div class="w-25 ps-4 pt-2">
+        <h4>Add User</h4>
+        <ol class="breadcrumb mb-1">
+          <li class="breadcrumb-item"><a
+              class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              href="/admin"
+            >Dashboard</a></li>
+          <li class="breadcrumb-item active"><a
+              class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              href="/admin/userManagement"
+            >Users List</a></li>
+          <li class="breadcrumb-item active">Add Users</li>
+        </ol>
+      </div>
+
+      <div class="card mx-auto" style="max-width: 600px;">
+
+        <div class="card-body">
+          <h5 class="card-title text-center mb-4">Add New User</h5>
+          <form method="post" action="/admin/addUserSub">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="Username"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="example@email.com"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="phoneNumber" class="form-label">Phone Number </label>
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder="Enter your phone number"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Enter your password"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="role"
+                name="role"
+                value="user"
+                hidden
+              />
+              <input
+                type="text"
+                id="isActive"
+                name="isActive"
+                value="true"
+                hidden
+              />
+            </div>
+            <div class="d-flex justify-content-between">
+              <a href="/admin/userManagement"><button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                >Cancel</button></a>
+              <button type="submit" class="btn btn-danger">Add New User</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div hidden>
+  <p id="existMail">{{existMail}}</p>
+</div>
+
+<footer class="bg-dark text-light py-4">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0">SML Bazaar</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="mb-0">Any questions? Let us know in
+          <br />store at Malappuram, Kerala, India<br />9846323495</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-addUser.js"></script>

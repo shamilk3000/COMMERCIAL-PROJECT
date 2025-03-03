@@ -1,0 +1,241 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-shop.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="/account"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="/account"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+
+<section class="pb-2 bg-lig">
+    <div class="container-fluid pb-2  border border-dark-subtle">
+        <div class="px-5 mt-3">
+            <h2 class="mb-4 text-center">SHOP</h2>
+            <div class="row justify-content-between mb-3">
+                <div class="col-md-6 col-sm-5">
+                    <div class="btn-group" role="group" aria-label="Product Categories">
+                        <button type="button" class="btn btn-light border border-dark-subtle" id="allProductsBtn"
+                            onclick="location.href='/shop'">All Products</button>
+                        {{#each category}}
+                        <button type="button" class="btn btn-light border border-dark-subtle" id="{{categoryName}}"
+                            onclick="location.href='/shop/{{categoryName}}'">{{categoryName}}</button>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-5 d-flex justify-content-md-end align-items-center">
+                    <button hidden class="btn btn-outline-dark me-2">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                    <form id="searchForm" action={{#if (eq button 'allProductsBtn' )
+                        }}"/shop"{{else}}'/shop/{{button}}'{{/if}} method="post"
+                        class="d-flex justify-content-center align-items-center mb-0">
+                        <div class="input-group" style="max-width: 300px;">
+                            <input type="text" class="form-control border border-dark" placeholder="Search"
+                                aria-label="Search" name="searchContent" id="searchInput">
+                            <button class="btn btn-outline-dark" type="submit">
+                    </form>
+                    <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="container-fluid bg-wh mt-5">
+        <div class="row justify-content-center gap-auto p-3">
+
+
+
+
+
+            <div id="allProductsDiv" class="product-div">
+                <div class="row justify-content-center gap-auto">
+                    <!-- Content for All Products -->
+                    {{#if (eq search "true")}}
+                    {{#if (eq searchProducts.length 0)}}
+                    <div class="d-flex justify-content-between align-items-center pb-4">
+                        <h5> Search result for "{{resultFor}}" : </h5>
+                        <a href={{#if (eq button 'allProductsBtn' ) }}"/shop"{{else}}'/shop/{{button}}'{{/if}}><button
+                                class="btn btn-outline-dark ">Clear Search</button></a>
+                    </div>
+                    <div>
+                        <h3 class="d-flex justify-content-center align-items-center">No products available in this name.
+                        </h3>
+                    </div>
+                    {{else}}
+                    <div class="d-flex justify-content-between align-items-center pb-4">
+                        <h5> Result for "{{resultFor}}" : </h5>
+                        <a href={{#if (eq button 'allProductsBtn' ) }}"/shop"{{else}}'/shop/{{button}}'{{/if}}><button
+                                class="btn btn-outline-dark ">Clear Search</button></a>
+                    </div>
+                    {{#each searchProducts}}
+                    <div class="col-md-3">
+                        <div class="product-card my-3 bg-light">
+                            <a href="/productSingle?id={{_id}}" style="text-decoration: none;">
+                                <div class="product-img-container">
+                                    <img src="{{singleimageConver (lookup productImage 0)}}" alt="Product">
+                                </div>
+                                <div class="product-title">{{name}} ({{size}})</div>
+                                <div class="product-price">&#8377;{{categoryOfferPrice}}</div>
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    {{else}}
+                    {{#if (eq products.length 0)}}
+                    <div>
+                        <h3 class="d-flex justify-content-center align-items-center">No products available in this
+                            category.</h3>
+                    </div>
+                    {{else}}
+                    {{#each products}}
+                    <div class="col-md-3">
+                        <div class="product-card my-3 bg-light">
+                            <a href="/productSingle?id={{_id}}" style="text-decoration: none;">
+                                <div class="product-img-container">
+                                    <img src="{{singleimageConver (lookup productImage 0)}}" alt="Product">
+                                </div>
+                                <div class="product-title">{{name}} ({{size}})</div>
+                                <div class="product-price">&#8377;{{categoryOfferPrice}}</div>
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<div hidden>
+    <p id="button">{{button}}</p>
+    <p id="completed">{{completed}}</p>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-5">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0 " href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt=""></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3  d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none ">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-shop.js"></script>

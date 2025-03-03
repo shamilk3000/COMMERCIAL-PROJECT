@@ -1,0 +1,159 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-thanks.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt="" /></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="/account"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt="" /></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart">
+                    Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="/account"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<div class="container my-4">
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <img class="object-fit-sm-contain me-3" style="width: 5%;"
+            src="http://127.0.0.1:5000/images/user/user-thankyou.png" alt="" />
+        <div>
+            <strong>Thank you for your order!</strong>
+            <p>Order : {{order._id}}</p>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <h5>Delivery</h5>
+        <p>{{order.address.firstName}}
+            {{order.address.lastName}},
+            {{order.address.address}},
+            {{order.address.area}},
+            {{order.address.pincode}},
+            {{order.address.city}},
+            {{order.address.state}}</p>
+    </div>
+
+    <div class="mb-3">
+        <h5>Time</h5>
+        <p>{{order.createdAt}}</p>
+    </div>
+
+    <div class="mb-3">
+        <h5>Payment</h5>
+        {{#if (eq order.paymentId.method "COD")}}
+        <p>Cash on delivery</p>
+        {{else}}
+        {{#if (eq order.paymentId.method "upi")}}
+        <p>Online Payment</p>
+        {{else}}
+        {{#if (eq order.paymentId.method "wallet")}}
+        <p>Wallet</p>
+        {{/if}}
+        {{/if}}
+        {{/if}}
+    </div>
+    {{!-- {{#if couponAvailable}}
+    <div class="alert alert-success">
+        <h5>🎉 Congratulations! {{message}}</h5>
+        <p>Use the coupon now or find it in your personal account.</p>
+    </div>
+    {{else}}{{/if}} --}}
+    <div class="d-flex justify-content-center">
+        <a href="/" class="btn btn-outline-success">Continue Shopping</a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-5">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt="" /></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i>
+                        <!-- Twitter Icon -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-thanks.js"></script>

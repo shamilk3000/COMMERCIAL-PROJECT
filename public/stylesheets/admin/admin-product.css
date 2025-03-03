@@ -1,0 +1,23 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+main {
+  flex: 1;
+}
+.table-container {
+  height: 327px;
+  overflow-y: auto;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: black;
+  border-color: black;
+}

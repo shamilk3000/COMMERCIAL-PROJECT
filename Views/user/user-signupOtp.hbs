@@ -1,0 +1,40 @@
+<head>
+  <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-signupOtp.css" />
+</head>
+
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <div class="otp-container bg-lightp-4 rounded border-success border shadow-lg bg-body-tertiary w-100 p-5"
+    style="max-width: 700px;">
+    <h3 class="text-center text-success mb-4">OTP VERIFICATION</h3>
+    <h6 class="text-center text-black lh-base">Please enter the OTP sent to your
+      email address
+      <strong>"{{email}}"</strong>
+      . The OTP will expire in :
+      <br /><span class="timer" id="timer">05:00</span>
+    </h6>
+    <form id="otpForm" action="/verify-otp" method="POST">
+      <div class="mb-3">
+        <input type="email" name="email" value="{{email}}" hidden />
+        <label for="otp" class="form-label">Enter OTP</label>
+        <input type="text" id="otp" class="form-control" placeholder="Enter 6-digit OTP" name="otp" />
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success" onclick="validate()">Verify OTP</button>
+      </div>
+    </form>
+    <div id="message" class="mt-3 text-center"></div>
+    <hr />
+    <form action="/resend-otp" method="POST" class="d-flex justify-content-center">
+      <input type="email" name="email" value="{{email}}" hidden />
+      <button type="submit" class="btn btn-danger">Resend OTP</button>
+    </form>
+    <div class="d-flex justify-content-center">
+      <a href="/backToSign_in?email={{email}}" class="link-underline-opacity-0 link-danger">Back to LogIn</a>
+    </div>
+    <div hidden>
+      <p id="warning">{{warning}}</p>
+    </div>
+  </div>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-signupOtp.js"></script>

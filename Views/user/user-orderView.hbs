@@ -1,0 +1,268 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-orderView.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<!-- Overlay for closing sidebar -->
+
+<div class="container-fluid my-auto">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-3 p-3 bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/account">
+                        <i class="bi bi-sliders"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white bg-danger rounded p-2" href="/orders"><i class="bi bi-box"></i>
+                        Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-person"></i> Update Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-wallet"></i> Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/address"><i
+                            class="bi bi-geo-alt"></i> My Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/logOut"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-9 p-3">
+
+            <div class="container mt-4 ">
+
+                <div class="container mt-5 ">
+                    <div class="card p-4 border bg-light">
+                        <h4 class="text-center fw-bold">ORDER DETAILS</h4>
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <!-- Product Image -->
+                                <p class="mb-3"><strong>Order ID :</strong> {{order._id}}</p>
+                                <div id="carouselExampleFade" class="carousel slide carousel-fade">
+                                    <div class="carousel-inner">
+
+                                        {{#each order.items}}
+                                        <div class="carousel-item {{#if (eq @index 0)}} active {{/if}}  border  "
+                                            style="background-color: #cfd4da;"><a href="/productSingle?id={{productId}}"
+                                                class="text-black text-decoration-none d-flex">
+                                                <div class="card border-0 m-auto " style="width: 6rem; ">
+                                                    <img class="img-thumbnail border-0  "
+                                                        style="background-color: #cfd4da;width: 100px; height: 130px;"
+                                                        src="{{singleimageConver (lookup productImage 0)}}" alt="">
+                                                </div>
+                                                <div class=" me-1 ms-2 p-2  hover-effect">
+                                                    <h6 class="mb-1">{{name}}</h6>
+                                                    <p class="mb-1">Color: {{selectedColor}}</p>
+                                                    <p class="mb-1 ">Qnty: {{quantity}}</p>
+                                                    <p class="mb-1 ">MRP: {{price}} x {{quantity}} = ₹{{totalPrice}}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        {{/each}}
+
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <!-- Order Details -->
+                            <div class="col-md-5">
+                                <h5 class="fw-bold">Details</h5>
+                                {{#if order.deliveryStatus.orderPlaced}}
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.orderedDate}} :
+                                    Your order has been placed.</p>
+                                {{/if}}
+                                {{#if order.deliveryStatus.shipped}}
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.shippedDate}} :
+                                    Seller has processed your order.</p>
+                                {{/if}}
+                                {{#if order.deliveryStatus.OutOfDelivery}}
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2
+                                    order.deliveryStatus.OutOfDeliveryDate}} : Item has been dispatched from the seller
+                                    warehouse.</p>
+                                {{/if}}
+                                {{#if order.deliveryStatus.delivered}}
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.deliveredDate}} :
+                                    Your order has been delivered.</p>
+                                {{/if}}
+
+                                {{#if order.deliveryStatus.return}}
+                                     <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.returnDate}} :
+                                    Your order has been returned.</p>
+                                {{else}}
+                                 {{#if order.deliveryStatus.cancelled}}
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.cancelledDate}} :
+                                    Your order has been cancelled.</p>
+                                {{/if}}
+                                {{/if}}
+
+
+                            </div>
+
+                            <!-- Order Status -->
+                            <div class="col-md-3">
+                                <ul class="order-status">
+                                    <li class="{{#if order.deliveryStatus.orderPlaced}}completed{{/if}}">ORDER PLACED
+                                    </li>
+                                    <li class="{{#if order.deliveryStatus.shipped}}completed{{/if}}">SHIPPED</li>
+                                    <li class="{{#if order.deliveryStatus.OutOfDelivery}}completed{{/if}}">OUT FOR
+                                        DELIVERY</li>
+                                    <li class="{{#if order.deliveryStatus.delivered}}completed{{/if}}">DELIVERED</li>
+                                </ul>
+                                <div class="text-center mt-3">
+                                    {{#if order.deliveryStatus.delivered }}
+                                     <button type="button" class="btn btn-danger px-4 py-2" {{#if (eq order.status "returned" )}}disabled{{/if}}{{#if isReturnExpired}}disabled{{/if}} onclick="returnOdr('{{order._id}}')">{{#if (eq order.status "returned")}}Order
+                                        Returned {{else}}Return Order{{/if}}</button>
+                                    {{else}}
+                                    <button type="button" class="btn btn-danger px-4 py-2" {{#if
+                                        order.deliveryStatus.delivered}}disabled{{/if}} {{#if
+                                        order.deliveryStatus.shipped}}disabled{{/if}} {{#if
+                                        order.deliveryStatus.OutOfDelivery}}disabled{{/if}} {{#if (eq
+                                        order.status "cancelled" )}}disabled{{/if}}
+                                        onclick="cancel('{{order._id}}')">{{#if (eq order.status "cancelled")}}Order
+                                        Cancelled {{else}}Cancel Order{{/if}}</button>
+                                        {{/if}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cancel Button -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-light py-3">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0 " href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt=""></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3  d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none ">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-orderView.js"></script>

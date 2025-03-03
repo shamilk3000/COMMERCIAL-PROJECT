@@ -1,0 +1,191 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  background: #343a40;
+  padding-top: 60px;
+  transition: 0.3s;
+}
+.sidebar a {
+  padding: 10px 20px;
+  display: block;
+  color: white;
+  text-decoration: none;
+}
+.sidebar a:hover {
+  background: #495057;
+}
+.sidebar.active {
+  left: 0;
+}
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+.menu-overlay.active {
+  display: block;
+}
+
+.product-image-thumbnails img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  cursor: pointer;
+}
+.stars {
+  color: #ffc107;
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+/* Main image styling */
+#mainImage {
+  width: 90%;
+  height: 90%;
+  transition: transform 0.3s ease;
+}
+
+/* Zoom lens styling */
+.zoom-lens {
+  position: absolute;
+  border: 2px solid #fff;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: zoom-in;
+  display: none;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Zoomed image container */
+.zoomed-image {
+  display: none;
+  position: absolute;
+  top: 30%;
+  left: 50%; /* Position the zoomed image to the right */
+  width: 500px;
+  height: 500px;
+  background-size: 200%;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+/* Thumbnail styling */
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  margin-bottom: 10px;
+  border-radius: 0.25rem;
+}
+
+.thumbnail-active {
+  border: 2px solid #0d6efd !important;
+}
+
+/* Layout adjustments */
+.thumbnails-column {
+  width: 100px; /* Fixed width for thumbnails column */
+  margin-right: 20px; /* Space between thumbnails and main image */
+}
+
+.main-image-column {
+  flex: 1; /* Main image takes remaining space */
+  position: relative; /* Ensure zoomed image is positioned relative to this container */
+}
+
+@media (max-width: 768px) {
+  .thumbnails-column {
+    width: 100%;
+    margin-right: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 0;
+  }
+
+  .main-image-column {
+    width: 100%;
+  }
+}
+
+.star-rating {
+  font-size: 2rem;
+  cursor: pointer;
+}
+.star-rating .star {
+  color: #ddd;
+}
+.star-rating .star.selected {
+  color: #ffc107;
+}
+
+.product-card {
+  width: 300px;
+  height: 420px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+  padding: 10px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-img-container {
+  width: 100%;
+  height: 350px; /* Fixed height */
+  overflow: hidden;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /*Ensures proper fit without distortion*/
+  transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover .product-img-container img {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 0px;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1rem;
+  color: #777;
+  margin-top: 0px;
+}

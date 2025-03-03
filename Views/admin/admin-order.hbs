@@ -1,0 +1,307 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/admin/admin-order.css">
+</head>
+
+<header class="bg-light shadow-sm ">
+    <nav class="navbar navbar-expand-lg navbar-light container ">
+        <div><a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                    width="100px" alt=""></a></div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/logOut">LogOut</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+            <div class="list-group list-group-flush">
+                <a href="/admin" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="/admin/userManagement" class="list-group-item list-group-item-action">Users</a>
+                <a href="/admin/category" class="list-group-item list-group-item-action ">Categories</a>
+                <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon </a>
+                <a href="/admin/productManagement" class="list-group-item list-group-item-action ">Products</a>
+                <a href="/admin/orderManagement" class="list-group-item list-group-item-action active"
+                    aria-current="true">Orders</a>
+                <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+            </div>
+        </div>
+
+        <main class="col-md-10 col-lg-11 py-1">
+            <div class="pt-3 pb-0 ps-3">
+                <h2>Orders</h2>
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item "><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Orders List</li>
+                </ol>
+            </div>
+            <div id="liveAlertPlaceholder"></div>
+            <div class=" container-fluid ">
+                <div class="row  ">
+                    <div class=" d-flex justify-content-between align-items-center ">
+
+                        <div class="col-5">
+                            <a href="/admin/orderManagement"><button class="btn btn-danger" id="allBtn">All</button></a>
+                            <a href="/admin/pending"><button class="btn btn-light" id="pending">Pending</button></a>
+                            <a href="/admin/delivered"><button class="btn btn-light"
+                                    id="delivered">Delivered</button></a>
+                            <a href="/admin/cancelled"><button class="btn btn-light"
+                                    id="cancelled">Cancelled</button></a>
+                        </div>
+
+                        <form class="d-flex flex-column pb-3 col-5" role="search" action="/admin/orderSearch"
+                            method="post">
+                            <label for="Search" class="form-label text-black">Search</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex col-10">
+                                    <input class="form-control me-2" type="search" placeholder="{{searchText}}"
+                                        aria-label="Search" id="Search" name="search">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-container">
+                {{#each order}}
+                <div class="card mb-3">
+                    <div class="row g-0 align-items-center p-2">
+                        <div class="col-md-3 d-block">
+                            <h6 class="ms-0 mb-2">{{increment @index}} - Item :<br> Order ID : {{_id}}</h6>
+
+
+                            <div id="carouselExampleCaptions{{increment @index}}" class="carousel slide">
+                                <div class="carousel-indicators">
+                                    {{#each items}}
+                                    <button type="button" data-bs-target="#carouselExampleCaptions"
+                                        data-bs-slide-to="{{@index}}" class="{{#if (eq @index 0)}}active{{/if}}"
+                                        aria-label="Slide {{@index}}"></button>
+                                    {{/each}}
+                                </div>
+                                <div class="carousel-inner">
+                                    {{#each items}}
+                                    <div class="carousel-item {{#if (eq @index 0)}} active {{/if}}  border  "
+                                        style="background-color: #cfd4da;">
+                                        <div class="text-black text-decoration-none d-flex">
+                                            <div class="card border-0 m-auto " style="width: 6rem; ">
+                                                <img class="img-thumbnail border-0  "
+                                                    style="background-color: #cfd4da; width: 100px; height: 130px;"
+                                                    src="{{singleimageConver (lookup productImage 0)}}" alt="">
+                                            </div>
+                                            <div class=" me-1 ms-2 p-2  hover-effect">
+                                                <h6 class="mb-1">{{name}}</h6>
+                                                <p class="mb-1">Color: {{selectedColor}}</p>
+                                                <p class="mb-1 ">Qnty: {{quantity}}</p>
+                                                <p class="mb-1 ">MRP: {{price}} x {{quantity}} = ₹{{totalPrice}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/each}}
+
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleCaptions{{increment @index}}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleCaptions{{increment @index}}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon " aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-center">
+                            <h6 class="ms-3"> User : {{user}}</h6>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-center">
+                            <h6 class="ms-3"> Total Amount : ₹{{totalAmount}}</h6>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-center">
+                            {{#if (eq status "pending")}}
+                            <span class="status-indicator bg-warning mt-1 me-2"></span> Pending
+                            {{else}}
+                            {{#if (eq status "delivered")}}
+                            <span class="status-indicator bg-success mt-1 me-2"></span> Delivered
+                            {{else}}
+                            {{#if (eq status "cancelled")}}
+                            <span class="status-indicator bg-danger mt-1 me-2"></span> Cancelled
+                            {{else}}
+                            {{#if (eq status "returned")}}
+                            <span class="status-indicator bg-danger mt-1 me-2"></span> Returned
+                            {{else}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                        </div>
+                        <div class="col-md-2 text-end d-flex justify-content-center">
+                            {{#if (eq status "pending")}}
+                            <button class="btn btn-warning me-2"
+                                onclick="edit('{{_id}}','{{deliveryStatus.shipped}}','{{deliveryStatus.OutOfDelivery}}','{{deliveryStatus.delivered}}')"
+                                data-bs-toggle="modal" data-bs-target="#edit">Edit Status</button>
+                            {{else}}
+                            {{#if (eq status "delivered")}}
+                            <button class="btn btn-warning me-2" onclick="edit('{{_id}}')" disabled>Edit Status</button>
+                            {{else}}
+                            {{#if (eq status "cancelled")}}
+                            <button class="btn btn-warning me-2" onclick="edit('{{_id}}')" disabled>Edit Status</button>
+                            {{else}}
+                             {{#if (eq status "returned")}}
+                            <button class="btn btn-warning me-2" onclick="edit('{{_id}}')" disabled>Edit Status</button>
+                            {{else}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+           
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {{#if (gt currentPage 1)}}
+        <li class="page-item">
+            <a class="page-link" href="/admin/orderManagement?page={{subtract currentPage 1}}">Previous</a>
+        </li>
+        {{/if}}
+
+        {{#range 1 totalPages}}
+        <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+            <a class="page-link" href="/admin/orderManagement?page={{this}}">{{this}}</a>
+        </li>
+        {{/range}}
+
+        {{#if (lt currentPage totalPages)}}
+        <li class="page-item">
+            <a class="page-link" href="/admin/orderManagement?page={{add currentPage 1}}">Next</a>
+        </li>
+        {{/if}}
+    </ul>
+</nav>
+ </div>
+    </div>
+    </main>
+</div>
+</div>
+
+<div class="form-text text-danger" hidden>
+    <h1 id="warningInfo">{{warningInfo}}</h1>
+    <h1 id="warning">{{warning}}</h1>
+    <h1 id="searchresult">{{searchresult}}</h1>
+    <h1 id="type">{{type}}</h1>
+    <h1 id="button">{{button}}</h1>
+</div>
+
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <p>SML Bazaar</p>
+            </div>
+            <div class="col-md-6">
+                <p>Any questions? Let us know at<br> Office of Manapuram, Kerala, India<br> 9846482463</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- deleteUser -->
+<div class="modal fade" id="edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Order Status</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container">
+                    <input type="hidden" id="orderId" name="id">
+
+                    <!-- Shipped -->
+                    <div class="row mb-2 align-items-center">
+                        <label class="col-sm-5 col-form-label">Shipped:</label>
+                        <div class="col-sm-7 d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="shipped" id="shippedYes"
+                                    value="true">
+                                <label class="form-check-label" for="shippedYes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="shipped" id="shippedNo" value="false"
+                                    checked>
+                                <label class="form-check-label" for="shippedNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Out for Delivery -->
+                    <div class="row mb-2 align-items-center">
+                        <label class="col-sm-5 col-form-label">Out for Delivery:</label>
+                        <div class="col-sm-7 d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="outForDelivery"
+                                    id="outForDeliveryYes" value="true">
+                                <label class="form-check-label" for="outForDeliveryYes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="outForDelivery" id="outForDeliveryNo"
+                                    value="false" checked>
+                                <label class="form-check-label" for="outForDeliveryNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivered -->
+                    <div class="row mb-2 align-items-center">
+                        <label class="col-sm-5 col-form-label">Delivered:</label>
+                        <div class="col-sm-7 d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivered" id="deliveredYes"
+                                    value="true">
+                                <label class="form-check-label" for="deliveredYes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivered" id="deliveredNo"
+                                    value="false" checked>
+                                <label class="form-check-label" for="deliveredNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="editSub()" class="btn btn-danger" id="deleteButtontext">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-order.js"></script>

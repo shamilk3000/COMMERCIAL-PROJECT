@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapsible Address Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+
+    <div class="container text-center">
+        <!-- Collapsible Button -->
+        <button class="btn btn-primary rounded-pill shadow-lg px-4 py-2" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#addressForm" 
+                aria-expanded="false" aria-controls="addressForm">
+            ➕ Add Address
+        </button>
+
+        <!-- Collapsible Form -->
+        <div class="collapse mt-3" id="addressForm">
+            <div class="card card-body shadow-lg border-0 p-4">
+                <h5 class="text-center mb-3">Enter Your Address</h5>
+                <form>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Full Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Street Address" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="City" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Zip Code" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Save Address</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

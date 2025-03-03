@@ -1,0 +1,83 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+main {
+  flex: 1;
+}
+.table-container {
+  height: 327px;
+  overflow-y: auto;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.product-card {
+  width: 300px;
+  height: 420px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+  padding: 10px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-img-container {
+  width: 100%;
+  height: 350px; /* Fixed height */
+  overflow: hidden;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /*Ensures proper fit without distortion*/
+  transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover .product-img-container img {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 0px;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1rem;
+  color: #777;
+  margin-top: 0px;
+}
+
+.status-indicator {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.hover-effect:hover {
+  background-color: #cfd4da;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: black;
+  border-color: black;
+}

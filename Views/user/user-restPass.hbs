@@ -1,0 +1,36 @@
+<head>
+  <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-restPass.css" />
+</head>
+
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <div class="forgotPassword-container bg-lightp-4 rounded border-success border shadow-lg bg-body-tertiary w-100 p-5"
+    style="max-width: 700px;">
+    <h3 class="text-center text-success mb-4">Reset Password</h3>
+    <h6 class="text-center text-black lh-base">Please enter your new password.</h6>
+    <form id="resetForm" action="/restPassSub" method="POST">
+      <div class="mb-3">
+        <input type="email" name="email" value="{{email}}" hidden />
+        <label for="otp" class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter here" name="password" />
+      </div>
+      <div class="mb-3">
+        <label for="otp" class="form-label">Confirm Password</label>
+        <input type="password" id="confirmPassword" class="form-control" placeholder="Enter here"
+          name="confirmPassword" />
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success">Reset password</button>
+      </div>
+    </form>
+    <hr />
+    <div class="d-flex justify-content-center">
+      <a href="/backTolog?email={{email}}" class="link-underline-opacity-0 link-danger">Back to LogIn</a>
+    </div>
+    <div hidden>
+      <p id="warning">{{warning}}</p>
+      <p id="warning">{{completed}}</p>
+    </div>
+  </div>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-restPass.js"></script>

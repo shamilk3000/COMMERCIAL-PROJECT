@@ -1,0 +1,333 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/admin/admin-product.css">
+</head>
+
+<header class="bg-light shadow-sm ">
+    <nav class="navbar navbar-expand-lg navbar-light container ">
+        <div><a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                    width="100px" alt=""></a></div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/logOut">LogOut</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+            <div class="list-group list-group-flush">
+                <a href="/admin" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="/admin/userManagement" class="list-group-item list-group-item-action">Users</a>
+                <a href="/admin/category" class="list-group-item list-group-item-action ">Categories</a>
+                <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+                <a href="/admin/productManagement" class="list-group-item list-group-item-action active"
+                    aria-current="true">Products</a>
+                <a href="/admin/orderManagement" class="list-group-item list-group-item-action ">Orders</a>
+                <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+            </div>
+        </div>
+
+        <main class="col-md-10 col-lg-11 py-1">
+            <div class="pt-3 pb-0 ps-3">
+                <h2>Products</h2>
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item "><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Products List</li>
+                </ol>
+            </div>
+            <div id="liveAlertPlaceholder"></div>
+            <div class=" container-fluid ">
+                <div class="row  ">
+                    <div class=" d-flex justify-content-between align-items-center ">
+
+                        <div class="col-5">
+                            <a href="/admin/productManagement"><button class="btn btn-danger"
+                                    id="allBtn">All</button></a>
+                            <a href="/admin/instock"><button class="btn btn-light" id="instockBtn">In Stock</button></a>
+                            <a href="/admin/outofstock"><button class="btn btn-light" id="outofstockBtn">Out Of
+                                    Stock</button></a>
+                        </div>
+
+                        <form class="d-flex flex-column pb-3 col-5" role="search" action="/admin/productSearch"
+                            method="post">
+                            <label for="Search" class="form-label text-black">Search</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex col-10">
+                                    <input class="form-control me-2" type="search" placeholder="{{searchText}}"
+                                        aria-label="Search" id="Search" name="search">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class=" d-flex justify-content-end col-2">
+                            <a style="text-decoration: none;" href="/admin/addProduct"><button class="btn btn-danger">+
+                                    Add Product</button></a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-container">
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+
+                            <th class="text-center" scope="col">No</th>
+                            <th class="text-center">Product</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Brand</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Offer-Price</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Added</th>
+                            <th class="text-center">Action</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <div>
+                            {{#each products}}
+                            <tr>
+                                <td class="align-middle text-center" scope="row">{{increment @index}}</td>
+                                <td class="align-middle justify-content-center">
+                                    <div class="card bg-transparent mx-auto" style="width: 6rem;">
+                                        <img class="img-thumbnail  bg-transparent"
+                                            src="{{singleimageConver (lookup this.productImage 0)}}" alt="">
+                                    </div>
+                                </td>
+                                <td class="align-middle text-center">{{this.name}} ({{this.size}})</td>
+                                <td class="align-middle text-center">{{this.brand}}</td>
+                                <td class="align-middle text-center">{{#each ../categoryDB}}{{#if (eq this._id
+                                    ../this.category)}}{{this.categoryName}}{{/if}}{{/each}}</td>
+                                <td class="align-middle text-center">&#8377;{{this.price}}</td>
+                                <td class="align-middle text-center">&#8377;{{this.categoryOfferPrice}} - {{#each
+                                    ../categoryDB}}{{#if (eq this._id ../this.category)}}{{this.offer}}{{/if}}{{/each}}%
+                                    + {{this.offer}}% offer
+                                </td>
+                                <td class="align-middle text-center">{{#if (eq this.quantity 0)}}<span
+                                        class="badge bg-danger">Out of Stock</span>{{else}}<span
+                                        class="badge bg-success">{{this.quantity}} - In Stock</span>{{/if}}</td>
+                                <td class="align-middle text-center">{{formatDate this.createdAt}}</td>
+                                <td class="align-middle text-center">
+                                    <div class="d-flex justify-content-center gap-2 align-items-center">
+                                        <form method="post" action="/admin/editProduct" class="mb-0">
+                                            <input hidden type="text" class="form-control" name="id" placeholder="id"
+                                                value="{{this._id}}">
+                                            <button class="btn btn-warning" type="submit">Edit</button>
+                                        </form>
+                                        <div>
+                                            <button class="btn btn-info " data-bs-toggle="modal" id="but"
+                                                data-bs-target="#viewUser" data-description="{{this.description}}"
+                                                onclick="view('{{this.name}}','{{this.brand}}','{{this.price}}','{{#each ../categoryDB}}{{#if (eq this._id ../this.category)}}{{this.categoryName}}{{/if}}{{/each}}','{{this.size}}','{{formatColors this.colors}}','{{this.quantity}}','{{this.createdBy}}','{{this.createdAt}}','{{this.updatedBy}}','{{this.updatedAt}}','{{arrayImageConvert this.productImage}}','{{this.offer}}','{{this.categoryOfferPrice}}','{{#each ../categoryDB}}{{#if (eq this._id ../this.category)}}{{this.offer}}{{/if}}{{/each}}')">
+                                                View
+                                            </button>
+
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-danger " data-bs-toggle="modal"
+                                                data-bs-target="#deleteUser"
+                                                onclick="deleteUser('{{this._id}}','{{this.name}}','{{this.brand }}','{{#each ../categoryDB}}{{#if (eq this._id ../this.category)}}{{this.categoryName}}{{/if}}{{/each}}','{{this.isDeleted}}')">
+                                                {{#if this.isDeleted}} Restore {{else}} Delete {{/if}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}}
+                            
+                        </div>
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {{#if (gt currentPage 1)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/productManagement?page={{subtract currentPage 1}}">Previous</a>
+                        </li>
+                        {{/if}}
+
+                        {{#range 1 totalPages}}
+                        <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                            <a class="page-link" href="/admin/productManagement?page={{this}}">{{this}}</a>
+                        </li>
+                        {{/range}}
+
+                        {{#if (lt currentPage totalPages)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/productManagement?page={{add currentPage 1}}">Next</a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </nav>
+            </div>
+
+    </div>
+    </main>
+</div>
+</div>
+
+<div class="form-text text-danger" hidden>
+    <h1 id="warningInfo">{{warningInfo}}</h1>
+    <h1 id="warning">{{warning}}</h1>
+    <h1 id="searchresult">{{searchresult}}</h1>
+    <h1 id="type">{{type}}</h1>
+    <h1 id="button">{{button}}</h1>
+</div>
+
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <p>SML Bazaar</p>
+            </div>
+            <div class="col-md-6">
+                <p>Any questions? Let us know at<br> Office of Manapuram, Kerala, India<br> 9846482463</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- viewUser -->
+<div class="modal fade" id="viewUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">View Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3 ">
+                        <form>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="viewname" placeholder="Not Added" value=""
+                                    name="Name" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Brand</label>
+                                <input type="text" class="form-control" id="viewbrand" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="viewprice" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Offer in %</label>
+                                <input type="text" class="form-control" id="offer" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Offer Price</label>
+                                <input type="number" class="form-control" id="offerPrice" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="viewcategory" placeholder="Not Added"
+                                    name="Email" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Size</label>
+                                <input type="text" class="form-control" id="viewsize" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="createdAt" class="form-label">Colors With Quantity</label>
+                                <input type="text" class="form-control" id="viewcolors" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="viewdescription" placeholder="Not Added"
+                                    name="Username" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Stock</label>
+                                <input type="text" class="form-control" id="viewstock" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Created By</label>
+                                <input type="text" class="form-control" id="viewcreatedBy" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Created At</label>
+                                <input type="text" class="form-control" id="viewcreatedAt" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Last Updated By</label>
+                                <input type="text" class="form-control" id="viewupdatedBy" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatedAt" class="form-label">Last Updated At</label>
+                                <input type="text" class="form-control" id="viewupdatedAt" placeholder="Not Added"
+                                    name="Password" disabled>
+                            </div>
+                    </div>
+                    <label for="updatedAt" class="form-label">Images</label>
+                    <div id="modalImageContainer" class="row g-2 justify-content-center gap-3">
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- deleteUser -->
+<div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteHed"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/deleteProduct" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="deleteid" placeholder="id" name="id" hidden>
+                        <div id="warningText">
+
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" id="deleteButtontext"></button></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-product.js"></script>

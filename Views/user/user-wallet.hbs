@@ -1,0 +1,241 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-wallet.css" />
+</head>
+<script src="https://kit.fontawesome.com/92dbda993e.js" crossorigin="anonymous"></script>
+
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<!-- Overlay for closing sidebar -->
+
+<div class="container-fluid my-auto">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-3 p-3 bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/account">
+                        <i class="bi bi-sliders"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/orders"><i
+                            class="bi bi-box"></i> Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/updateProfile"><i
+                            class="bi bi-person"></i> Update Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white bg-danger rounded p-2"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/wallet"><i
+                            class="bi bi-wallet"></i> Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/address"><i
+                            class="bi bi-geo-alt"></i> My Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/changePass"><i
+                            class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/logOut"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-9 p-3">
+
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="wallet-card text-center">
+                            {{#if val}}
+                            <h4><i class="fas fa-wallet"></i> My Wallet</h4>
+                            <p class="wallet-balance">₹<span id="walletBalance">{{wallet.balance}}</span></p>
+                            <p class="mb-3">Available Balance</p>
+                            {{/if}}
+                            <button data-bs-toggle="modal" data-bs-target="#view"
+                                class="btn wallet-btn text-white px-4 py-2"><i class="fas fa-exchange-alt me-1"></i>
+                                Transactions</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-light py-3">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0 " href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt=""></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3  d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none ">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<div class="modal fade" id="view" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="container">
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h4 class="mb-0">Transaction History</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover text-center align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>No</th>
+                                            {{!-- <th>Transaction ID</th> --}}
+                                            <th>Order ID</th>
+                                            <th>Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each payDB}}
+                                        <tr>
+                                            <td class="m-1">{{increment @index}}</td>
+                                            {{!-- <td class="m-1">{{paymentId}}</td> --}}
+                                            <td class="m-1">{{orderId}}</td>
+                                            {{#if payed}}
+                                            <td class="text-danger m-1">₹{{amount}}</td>
+                                            {{else}}
+                                            <td class="text-success m-1">₹{{amount}}</td>
+                                            {{/if}}
+                                            <td class="m-1">{{method}}</td>
+                                            <td class="m-1">{{formatDate createdAt}}</td>
+                                            {{#if payed}}
+                                            <td class="m-1"><span class="badge bg-danger">Debited</span></td>
+                                            {{else}}
+                                            <td class="m-1"><span class="badge bg-success">Credited</span></td>
+                                            {{/if}}
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-wallet.js"></script>

@@ -1,0 +1,98 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+        <a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/logOut">LogOut</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-2 col-lg-1 p-0 d-none d-md-block bg-white border-end">
+            <div class="list-group list-group-flush">
+                <a href="/admin" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="/admin/userManagement" class="list-group-item list-group-item-action ">Users</a>
+                <a href="/admin/category" class="list-group-item list-group-item-action active"
+                    aria-current="true">Categories</a>
+                <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+                <a href="/admin/productManagement" class="list-group-item list-group-item-action">Products</a>
+                <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+            </div>
+        </div>
+
+
+        <div class="col-md-10 col-lg-11 p-4">
+
+            <div class="w-30">
+                <h4>Add Category</h4>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item "><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a
+                            class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                            href="/admin/category">Categories List</a></li>
+                    <li class="breadcrumb-item active">Add Category</li>
+                </ol>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title ">General Information</h5>
+                    <form action="/admin/addCategorySub" method="post" onsubmit="return validateCategoryForm()">
+                        <div class="mb-3 pt-2">
+                            <label for="categoryName" class="form-label">Category Name</label>
+                            <input type="text" id="categoryName" class="form-control"
+                                placeholder="Type category name here..." name="categoryName">
+                            <div class="form-text text-danger">{{existCategory}}</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="offer" class="form-label">Description</label>
+                            <input type="number" id="offer" class="form-control" value="0"
+                                placeholder="Offer in %" name="offer" min="0" max="100">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" class="form-control" rows="2"
+                                placeholder="Type category description here..." name="description"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="/admin/category"><button type="button"
+                                    class="btn btn-outline-secondary me-2">Cancel</button></a>
+                            <button type="submit" class="btn btn-danger">+ Add Category</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<footer class="bg-dark text-light py-4">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <p class="mb-0">SML Bazaar</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0">Any questions? Let us know in <br>store at Malappuram, Kerala, India<br>9846323495</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/admin/admin-addCategory.js"></script>

@@ -1,0 +1,61 @@
+<div class="container-fluid vh-100 d-flex">
+  <div class="row w-100">
+    <div class="col-md-6 d-flex flex-column justify-content-center px-5">
+      <h1 class="mb-3 text-center">Sign Up</h1>
+      <form method="post" action="/signupSub">
+        <div class="mb-2">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" />
+        </div>
+        <div class="mb-2">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
+        </div>
+        <div class="mb-2">
+          <label for="phoneNumber" class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" />
+        </div>
+        <div class="mb-2">
+          <label for="password" class="form-label">Password</label>
+          <div class="d-flex">
+          <input type="password" class="form-control me-2" id="password" name="password" placeholder="Enter password" />
+           <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+            <i class="bi bi-eye-fill"></i>
+          </button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+            placeholder="Confirm password" />
+        </div>
+        <button type="submit" class="btn btn-success w-100">Sign Up</button>
+      </form>
+      <div class="text-center mt-1">
+        <p>or continue with</p>
+        <div class="d-flex justify-content-center">
+          <a href="/auth/google" class="text-decoration-none">
+            <button class="btn d-flex align-items-center gap-1 border" style="background-color: white;">
+              <img src="https://www.google.com/favicon.ico" alt="Google Icon" style="width: 18px; height: 18px;" />
+              <span>Continue with Google</span>
+            </button>
+          </a>
+        </div>
+      </div>
+      <div class="text-center mt-2">
+        <p>Already have an account?
+          <a href="/sessionCheck" class="text-decoration-none">Login</a>
+        </p>
+        <a href="/" class="btn btn-outline-success btn-sm ">Back to Home</a>
+      </div>
+    </div>
+    <div class="col-md-6 d-none d-md-block my-3"
+      style="background-image: url('http://127.0.0.1:5000/images/user/user-signup.jpg'); background-size: contain; background-position: center;background-repeat: no-repeat;">
+    </div>
+  </div>
+</div>
+<div hidden>
+  <p id="warning">{{warning}}</p>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-signup.js"></script>

@@ -1,0 +1,491 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-address.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<!-- Overlay for closing sidebar -->
+
+<div class="container-fluid my-auto">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-3 mb-4 mt-4 p-4 bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/account"><i
+                            class="bi bi-sliders"></i> Dashboard </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/orders"><i
+                            class="bi bi-box"></i> Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-person"></i> Update Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-wallet"></i> Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white bg-danger rounded p-2" href="/address"><i class="bi bi-geo-alt"></i>
+                        My Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/logOut"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-9 p-3">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-danger mb-3 me-4 p-2" data-bs-toggle="modal"
+                    data-bs-target="#addAddress">
+                    + Add Address
+                </button>
+            </div>
+            <div class="col-md-12 ">
+                <div class="row">
+                {{#if noDB }}
+                {{else}} {{#each address}}
+                <div class="col-md-4 col-sm-12 my-2">
+                <button class="btn btn-outline-secondary text-dark  ms-0 mb-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#address{{increment @index}}" aria-expanded="false" aria-controls="collapseExample">
+                    {{increment @index}} : {{firstName}} {{lastName}}, {{address}}, {{area}}, {{pincode}}, {{city}}, {{state}}<br> <span class="text-primary">Click here to show </span>
+                </button>
+                </div>
+                {{/each}}{{/if}}
+                </div>
+            </div>
+            {{#if noDB}}
+            <div class="alert alert-warning d-flex justify-content-center align-items-center my-3 py-5 " role="alert">
+                <h5 class="my-4">No Address added.</h5>
+                {{else}}
+                {{#each address}}
+                <div class="col-md-12 mb-4 ">
+                    <div class="collapse" id="address{{increment @index}}">
+                        <div class="card card-body">
+                            <h5 class="text-center mb-2">Address - {{increment @index}}</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input value="{{firstName}}" name="firstName" id="firstName{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter first name" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input value="{{lastName}}" name="lastName" id="lastName{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter last name" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">E-mail</label>
+                                        <input value="{{email}}" name="email" id="email{{increment @index}}"
+                                            type="email" class="form-control" placeholder="Enter email" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mobile No</label>
+                                        <input value="{{mobile}}" name="mobile" id="mobile{{increment @index}}"
+                                            type="tel" class="form-control" placeholder="Enter mobile number" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Pincode</label>
+                                        <input value="{{pincode}}" name="pincode" id="pincode{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter pincode" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Flat, House no., Building, Apartment</label>
+                                        <input value="{{address}}" name="address" id="addressdata{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter address details"
+                                            readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Area, Street, Sector, Village</label>
+                                        <input value="{{area}}" name="area" id="area{{increment @index}}" type="text"
+                                            class="form-control" placeholder="Enter area details" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Landmark</label>
+                                        <input value="{{landmark}}" name="landmark" id="landmark{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter landmark" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Town/City</label>
+                                        <input value="{{city}}" name="city" id="city{{increment @index}}" type="text"
+                                            class="form-control" placeholder="Enter town or city" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">State</label>
+                                        <input value="{{state}}" name="state1" id="state{{increment @index}}"
+                                            type="text" class="form-control" placeholder="Enter state" readonly>
+                                    </div>
+                                </div>
+
+
+                                <div class="d-flex justify-content-end align-items-end">
+                          
+                                    <button class="btn btn-danger me-3"
+                                        onclick="deleteAddress('{{_id}}')">Delete</button>
+                                    <button class="btn btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#editAddressM" onclick="edit('{{increment @index}}','{{_id}}')">
+                                        Edit Address
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {{/each}}{{/if}}
+            </div>
+
+
+
+
+
+
+
+
+            <footer class="bg-dark text-light py-3">
+                <div class="container px-0 py-auto">
+                    <div class="row px-0">
+                        <div class="col-md-3 d-flex justify-content-center align-items-center">
+                            <a class="navbar-brand m-0 p-0 " href="#"><img
+                                    src="http://127.0.0.1:5000/images/user/logo.webp" width="160px" alt=""></a>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Categories</h5>
+                            <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                                {{#each category}}
+                                <li><a href="/shop/{{categoryName}}"
+                                        class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Help</h5>
+                            <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                                <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a>
+                                </li>
+                                <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3  d-flex flex-column gap-2">
+                            <h5>Get in Touch</h5>
+                            <p>Contact us via social media:</p>
+                            <div class="social-icons">
+                                <a href="#" class="text-light me-3 text-decoration-none ">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                                <a href="#" class="text-light me-3 text-decoration-none">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                                <a href="#" class="text-light me-3 text-decoration-none">
+                                    <i class="bi bi-linkedin"></i>
+                                </a>
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                                    target="_blank" class="text-light me-3 text-decoration-none">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                                <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                                    <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+
+
+
+
+
+            <!-- Edit Address Modal -->
+            <div class="modal fade" id="editAddressM" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="editAddressLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editAddressLabel">Edit Address</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container mt-4">
+                                <form id="editaddressForm" onsubmit="event.preventDefault(); editAddressDB();">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input name="id" id="editid" type="hidden" class="form-control"
+                                                placeholder="Enter first name">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <input name="firstName" id="editfirstName" type="text"
+                                                    class="form-control" placeholder="Enter first name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <input name="lastName" id="editlastName" type="text"
+                                                    class="form-control" placeholder="Enter last name">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">E-mail</label>
+                                                <input name="email" id="editemail" type="email" class="form-control"
+                                                    placeholder="Enter email">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Mobile No</label>
+                                                <input name="mobile" id="editmobile" type="tel" class="form-control"
+                                                    placeholder="Enter mobile number">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Pincode</label>
+                                                <input name="pincode" id="editpincode" type="text" class="form-control"
+                                                    placeholder="Enter pincode">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Flat, House no., Building, Apartment</label>
+                                                <input name="address" id="editaddress" type="text" class="form-control"
+                                                    placeholder="Enter address details">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Area, Street, Sector, Village</label>
+                                                <input name="area" id="editarea" type="text" class="form-control"
+                                                    placeholder="Enter area details">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Landmark</label>
+                                                <input name="landmark" id="editlandmark" type="text"
+                                                    class="form-control" placeholder="Enter landmark">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Town/City</label>
+                                                <input name="city" id="editcity" type="text" class="form-control"
+                                                    placeholder="Enter town or city">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">State</label>
+                                                <input name="state" id="editstate" type="text" class="form-control"
+                                                    placeholder="Enter state">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-end">
+                                        <button type="button" class="btn btn-secondary me-2"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger">Edit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Address Modal -->
+            <div class="modal fade" id="addAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="addAddressLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addAddressLabel">Add Address</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addressForm" onsubmit="event.preventDefault(); addAddress();">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input name="firstName" id="firstName" type="text" class="form-control"
+                                                placeholder="Enter first name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input name="lastName" id="lastName" type="text" class="form-control"
+                                                placeholder="Enter last name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">E-mail</label>
+                                            <input name="email" id="email" type="email" class="form-control"
+                                                placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Mobile No</label>
+                                            <input name="mobile" id="mobile" type="tel" class="form-control"
+                                                placeholder="Enter mobile number">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Pincode</label>
+                                            <input name="pincode" id="pincode" type="text" class="form-control"
+                                                placeholder="Enter pincode">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Flat, House no., Building, Apartment</label>
+                                            <input name="address" id="address" type="text" class="form-control"
+                                                placeholder="Enter address details">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Area, Street, Sector, Village</label>
+                                            <input name="area" id="area" type="text" class="form-control"
+                                                placeholder="Enter area details">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Landmark</label>
+                                            <input name="landmark" id="landmark" type="text" class="form-control"
+                                                placeholder="Enter landmark">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Town/City</label>
+                                            <input name="city" id="city" type="text" class="form-control"
+                                                placeholder="Enter town or city">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">State</label>
+                                            <input name="state" id="state" type="text" class="form-control"
+                                                placeholder="Enter state">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end align-items-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-danger">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <script src="http://127.0.0.1:5000/javascripts/user/user-address.js"></script>

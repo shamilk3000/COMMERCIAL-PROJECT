@@ -1,0 +1,188 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-coupon.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<!-- Overlay for closing sidebar -->
+
+<div class="container-fluid my-auto">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-3 p-3 bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white bg-danger rounded p-2" href="/account">
+                        <i class="bi bi-sliders"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/orders"><i
+                            class="bi bi-box"></i> Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/updateProfile"><i
+                            class="bi bi-person"></i> Update Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-wallet"></i> Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/address"><i
+                            class="bi bi-geo-alt"></i> My Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/changePass"><i
+                            class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/logOut"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-7 col-lg-7 d-flex justify-content-center p-3">
+
+            <div class="border p-3 bg-light col-8">
+                <h5 class="text-center mb-3 text-danger">Coupons</h5>
+                <div class="row">
+                    <div class="card-body table-container">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">No</th>
+                                    <th class="text-center" scope="col">Coupon Code</th>
+                                    <th class="text-center" scope="col">Offer Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each coupon}}
+                                <tr>
+                                    <td class="align-middle text-center" scope="row">{{increment @index}}</td>
+                                    <td class="align-middle text-center">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="copyInput{{increment @index}}"
+                                                value="{{this.couponCode}}" readonly>
+                                            <button class="btn btn-outline-primary"
+                                                onclick="copyText('{{increment @index}}')">Copy</button>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center">&#8377;{{this.discountValue}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-light py-3">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0 " href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt=""></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3  d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none ">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-coupon.js"></script>

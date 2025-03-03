@@ -1,0 +1,54 @@
+<div class="container-fluid vh-100 d-flex">
+  <div class="row w-100">
+
+    <div class="col-md-6 d-flex flex-column justify-content-center px-5">
+      <h1 class="text-center">Welcome Back</h1>
+      <form method="post" action="/loginSub">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <div class="d-flex">
+          <input type="password" class="form-control me-2" id="password" name="password" placeholder="Enter your password" />
+           <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+              <i class="bi bi-eye-fill"></i>
+          </button>
+          </div>
+          <div class="pt-3">
+            <a href="/forgotPass" class="text-decoration-none">Forgot password?</a>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Login</button>
+      </form>
+      <div class="text-center mt-1">
+        <p>or continue with</p>
+        <div class="d-flex justify-content-center">
+          <a href="/auth/google" class="text-decoration-none">
+            <button class="btn d-flex align-items-center gap-2 border" style="background-color: white;">
+              <img src="https://www.google.com/favicon.ico" alt="Google Icon" style="width: 18px; height: 18px;" />
+              <span>Continue with Google</span>
+            </button>
+          </a>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <p>Don't have an account?
+          <a href="/signUp" class="text-decoration-none">Sign up</a>
+        </p>
+        <a href="/" class="btn btn-outline-success btn-sm">Back to Home</a>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-none d-md-block my-3"
+      style="background-image: url('http://127.0.0.1:5000/images/user/user-login.jpg'); background-size: contain; background-position: center;background-repeat: no-repeat;">
+    </div>
+  </div>
+</div>
+<div hidden>
+  <p id="warning">{{warning}}</p>
+  <p id="completed">{{completed}}</p>
+</div>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-login.js"></script>

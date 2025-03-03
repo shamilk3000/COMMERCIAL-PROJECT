@@ -1,0 +1,277 @@
+<head>
+    <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/user/user-orders.css" />
+</head>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark z-3 sticky-top">
+    <div class="container-fluid">
+        <button class="btn btn-dark d-md-none" id="menuToggle">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <div class="collapse navbar-collapse d-none d-md-block">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"></i></a></li>
+                <!-- Cart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i></a></li>
+                <!-- Heart Icon -->
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i></a></li>
+                <!-- Home Icon -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar (Appears on Medium & Smaller Screens) -->
+<div class="sidebar z-3" id="sidebar">
+    <div class="d-flex justify-content-between">
+        <a class="navbar-brand ms-5 py-0 my-0" href="/"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                width="100px" alt=""></a>
+        <a href="#" class="close-btn text-end pe-3" id="closeSidebar">&times;</a>
+    </div>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showCart"><i class="bi bi-cart"> Cart</i></a></li>
+        <!-- Cart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"> Whish List</i></a></li>
+        <!-- Heart Icon -->
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"> Account</i></a></li>
+        <!-- Home Icon -->
+    </ul>
+</div>
+
+<!-- Overlay for closing sidebar -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<!-- Overlay for closing sidebar -->
+
+<div class="container-fluid my-auto">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-3 p-3 bg-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/account">
+                        <i class="bi bi-sliders"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white bg-danger rounded p-2" href="/orders"><i class="bi bi-box"></i>
+                        Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-person"></i> Update Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-wallet"></i> Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/address"><i
+                            class="bi bi-geo-alt"></i> My Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="#"><i
+                            class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark icon-link icon-link-hover"
+                        style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" href="/logOut"><i
+                            class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-9 p-3">
+
+            <div class="container mt-4 table-container">
+
+
+
+
+                {{#each order}}
+                <div class="card mb-3 p-2">
+                    <div class="row g-0 align-items-center p-2">
+                        <h6 class="ms-0 mb-2">{{increment @index}} - Item : Order ID : {{_id}}</h6>
+                        <div class="col-md-4 d-flex">
+
+
+                            <div id="carouselExampleCaptions{{increment @index}}" class="carousel slide carousel-fade">
+                                <div class="carousel-indicators">
+                                    {{#each items}}
+                                    <button type="button" data-bs-target="#carouselExampleCaptions"
+                                        data-bs-slide-to="{{@index}}" class="{{#if (eq @index 0)}}active{{/if}}"
+                                        aria-label="Slide {{@index}}"></button>
+                                    {{/each}}
+                                </div>
+                                <div class="carousel-inner">
+                                    {{#each items}}
+                                    <div class="carousel-item {{#if (eq @index 0)}} active {{/if}}  border  "
+                                        style="background-color: #cfd4da;"><a href="/productSingle?id={{productId}}"
+                                            class="text-black text-decoration-none d-flex">
+                                            <div class="card border-0 m-auto " style="width: 6rem; ">
+                                                <img class="img-thumbnail border-0  "
+                                                    style="background-color: #cfd4da;width: 130px; height: auto;"
+                                                    src="{{singleimageConver (lookup productImage 0)}}" alt="">
+                                            </div>
+                                            <div class=" me-1 ms-2 p-2  hover-effect">
+                                                <h6 class="mb-1">{{name}}</h6>
+                                                <p class="mb-1">Color: {{selectedColor}}</p>
+                                                <p class="mb-1 ">Qnty: {{quantity}}</p>
+                                                <p class="mb-1 pb-3">MRP: {{price}} x {{quantity}} = ₹{{totalPrice}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    {{/each}}
+
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleCaptions{{increment @index}}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleCaptions{{increment @index}}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon " aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <h6 class="ms-3"> Total Amount : ₹{{totalAmount}}</h6>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-center">
+                            {{#if (eq status "pending")}}
+                            <span class="status-indicator bg-warning mt-1 me-2"></span> Pending
+                            {{else}}
+                            {{#if (eq status "delivered")}}
+                            <span class="status-indicator bg-success mt-1 me-2"></span> Delivered
+                            {{else}}
+                            {{#if (eq status "cancelled")}}
+                            <span class="status-indicator bg-danger mt-1 me-2"></span> Cancelled
+                            {{else}}
+                            {{#if (eq status "returned")}}
+                            <span class="status-indicator bg-danger mt-1 me-2"></span> Returned
+                            {{else}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                        </div>
+                        <div class="col-md-2 text-end d-flex justify-content-center">
+                            {{#if (eq status "pending")}}
+                            <a href="/orderView/{{_id}}"><button class="btn btn-warning me-2">View</button></a>
+                            {{else}}
+                            {{#if (eq status "delivered")}}
+                            <a href="/orderView/{{_id}}"><button class="btn btn-warning me-2">View</button></a>
+                            {{else}}
+                            {{#if (eq status "cancelled")}}
+                            <a href="/orderView/{{_id}}"><button class="btn btn-warning me-2">View</button></a>
+                            {{else}}
+                            {{#if (eq status "returned")}}
+                            <a href="/orderView/{{_id}}"><button class="btn btn-warning me-2">View</button></a>
+                            {{else}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+                            {{/if}}
+
+
+
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {{#if (gt currentPage 1)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/orders?page={{subtract currentPage 1}}">Previous</a>
+                        </li>
+                        {{/if}}
+
+                        {{#range 1 totalPages}}
+                        <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                            <a class="page-link" href="/orders?page={{this}}">{{this}}</a>
+                        </li>
+                        {{/range}}
+
+                        {{#if (lt currentPage totalPages)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/orders?page={{add currentPage 1}}">Next</a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-light py-3">
+    <div class="container px-0 py-auto">
+        <div class="row px-0">
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <a class="navbar-brand m-0 p-0 " href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp"
+                        width="160px" alt=""></a>
+            </div>
+            <div class="col-md-3">
+                <h5>Categories</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    {{#each category}}
+                    <li><a href="/shop/{{categoryName}}"
+                            class="text-light text-decoration-none hover-link">{{categoryName}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <ul class="list-unstyled py-2 d-flex flex-column gap-2">
+                    <li><a href="#" class="text-light text-decoration-none hover-link">Return & Order</a></li>
+                    <li><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3  d-flex flex-column gap-2">
+                <h5>Get in Touch</h5>
+                <p>Contact us via social media:</p>
+                <div class="social-icons">
+                    <a href="#" class="text-light me-3 text-decoration-none ">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shamilshalusml@gmail.com&su=I have explored your online store, SML Bazaar."
+                        target="_blank" class="text-light me-3 text-decoration-none">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="http://127.0.0.1:5000/javascripts/user/user-orders.js"></script>
