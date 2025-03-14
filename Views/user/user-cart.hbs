@@ -139,7 +139,7 @@
                                                 class="bi bi-trash"></i></button>
                                     </div>
                                 </td>
-                                <td class="align-middle text-center">{{totalPrice}}</td>
+                                <td class="align-middle text-center" id="{{productId}}total">&#8377;{{totalPrice}}</td>
 
                             </tr>
                             {{/each}}
@@ -152,7 +152,7 @@
                 <div class="card p-3 my-3">
                     <h5 class="mb-3">Cart Totals</h5>
                     <p class="d-flex justify-content-between">
-                        <span>Total : </span> <strong>&#8377;{{totalAmount}}</strong>
+                        <span>Total : </span> <strong>&#8377;<span id="total">{{totalAmount}}</span></strong>
                     </p>
                     <form action="/placeOder" method="post">
                         <input type="hidden" name="from" value="cart">

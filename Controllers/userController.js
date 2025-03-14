@@ -8,6 +8,7 @@ const Wishlist = require("../Models/wishlistModel");
 const Order = require("../Models/ordersModel");
 const Payment = require("../Models/paymentModel");
 const Wallet = require("../Models/walletModel");
+const Brand = require("../Models/brandModel");
 const Razorpay = require("razorpay");
 const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
 const crypto = require("crypto");
@@ -1037,6 +1038,7 @@ const showCart = async function (req, res) {
 const editCart = async function (req, res) {
   try {
     const editCartdata = req.body;
+    console.log(editCartdata)
 
     const user = await User.findOne({ email: req.session.user, role: "user" });
     if (!user) {
@@ -1055,11 +1057,14 @@ const editCart = async function (req, res) {
       return res.status(404).json({ error: "Product not found in cart" });
     }
 
+    let firstTotal = product.quantity;
     product.quantity = Number(editCartdata.quantity);
-
     await cart.save();
 
-    res.json({ updated: true });
+    const productDB = await Product.findOne({ _id : editCartdata.id })
+    let total = Number(editCartdata.quantity)*productDB.categoryOfferPrice;
+    let minus = firstTotal*productDB.categoryOfferPrice;
+    res.json({ updated: true ,quantity : editCartdata.quantity,total,minus});
   } catch (error) {
     console.error("Error updating cart:", error);
     res
@@ -1519,6 +1524,13 @@ const placeOderSub = async (req, res) => {
     const coupons = await Coupon.find({ status: "Active" });
     const category = await Category.find({ isDeleted: false });
     let data = req.body;
+    if (data.deliveryCharge == "true"){
+      data.actualTotalAmount = Number(data.actualTotalAmount)+100
+      data.totalAmount = Number(data.totalAmount)+100
+    }else{
+      data.actualTotalAmount = Number(data.actualTotalAmount)
+      data.totalAmount = Number(data.totalAmount)
+    }
     let coupon = "";
     let discountAmount = "";
     const user = await User.findOne({ email: req.session.user, role: "user" });
@@ -1526,6 +1538,7 @@ const placeOderSub = async (req, res) => {
     data.productsData = JSON.parse(data.productsData);
     if (data.paymentDetails) {
       data.paymentDetails = JSON.parse(data.paymentDetails);
+      console.log(data.paymentDetails)
     }
     await Promise.all(
       data.productsData.map(async (product) => {
@@ -1537,7 +1550,26 @@ const placeOderSub = async (req, res) => {
         }
       })
     );
-    discountAmount = Number(data.actualTotalAmount) - Number(data.totalAmount);
+
+    data.productsData.forEach(async (item)=>{
+      let dbProduct = await Product.findOne({_id: item.productId,})
+      dbProduct.sale = dbProduct.sale + Number(item.quantity);
+      await dbProduct.save();
+      let dbCategory = await Category.findOne({_id: dbProduct.category,})
+      dbCategory.sale = dbCategory.sale + Number(item.quantity);
+      await dbCategory.save();
+      let brand = await Brand.findOne({ name : dbProduct.brand })
+      if(!brand){
+        brand = new Brand({
+          name : dbProduct.brand,
+        })
+        await brand.save();
+      }
+      brand.sale = brand.sale + Number(item.quantity);
+      await brand.save();
+    })
+
+    discountAmount = data.actualTotalAmount - data.totalAmount;
     if (data.applyed == "true") {
       coupon = await Coupon.findOne({ couponCode: data.couponCode });
     }
@@ -1550,6 +1582,7 @@ const placeOderSub = async (req, res) => {
         couponDiscount: coupon.discountValue,
       }),
       discountAmount: discountAmount,
+      ...(data.deliveryCharge == "true" && { deliveryCharge: 100 }),
       totalAmountNoOffer: data.actualTotalAmount,
       totalAmount: data.totalAmount,
       address: {
@@ -1586,8 +1619,17 @@ const placeOderSub = async (req, res) => {
         orderId: orderDB._id,
         paymentId: data.paymentDetails.id,
         amount: amount,
-        method: data.paymentDetails.method,
-      });
+        email: data.paymentDetails.email,
+        contact: data.paymentDetails.contact,
+        method: data.paymentType,
+        onlineMethod: data.paymentDetails.method,
+        ...(data.paymentDetails.vpa && { upiID: data.paymentDetails.vpa }),
+        ...(data.paymentDetails.card_id && { cardID: data.paymentDetails.card_id }),
+        ...(data.paymentDetails.card && { cardDetails: data.paymentDetails.card }),
+        ...(data.paymentDetails.bank && { bank: data.paymentDetails.bank }),
+        ...(data.paymentDetails.acquirer_data?.bank_transaction_id && { bankTransactionID: data.paymentDetails.acquirer_data.bank_transaction_id }),
+        ...(data.paymentDetails.acquirer_data?.upi_transaction_id && { upiTransactionID: data.paymentDetails.acquirer_data.upi_transaction_id }),
+        });
       await paymentDB.save();
       orderDB.paymentId.paymentId = paymentDB._id;
       await orderDB.save();
@@ -1603,12 +1645,12 @@ const placeOderSub = async (req, res) => {
       await orderDB.save();
       let walletDB = await Wallet.findOne({ userId: user._id });
       if (walletDB) {
-        walletDB.balance -= Number(data.totalAmount);
+        walletDB.balance -= data.totalAmount;
         await walletDB.save();
       }
     }
     user.orders.push(orderDB._id);
-    user.totalPurchaseAmount += Number(data.totalAmount);
+    user.totalPurchaseAmount += data.totalAmount;
     await user.save();
     data.productsData.forEach(async (item) => {
       let product = await Product.findById(item.productId);
@@ -1805,6 +1847,7 @@ const removeCoupon = async (req, res) => {
 };
 
 const cancelOder = async (req, res) => {
+  try {
   let { id } = req.body;
   const user = await User.findOne({ email: req.session.user, role: "user" });
   id = new ObjectId(id);
@@ -1839,6 +1882,7 @@ const cancelOder = async (req, res) => {
     await user.save();
     let payDB = await Payment.findOne({ orderId: oder._id });
     payDB.payed = false;
+    payDB.oderStatus = "Cancelled"
     await payDB.save();
     if (oder.paymentId.method != "COD") {
       let walletDB = await Wallet.findOne({ userId: user._id });
@@ -1853,9 +1897,14 @@ const cancelOder = async (req, res) => {
     }
     res.status(200).json({ cancel: true });
   }
+  } catch (error) {
+    console.error("Error fetching page:", error);
+    res.redirect({ error: "Something went wrong " });
+  }
 };
 
 const returnOder = async (req, res) => {
+  try {
   let { id } = req.body;
   const user = await User.findOne({ email: req.session.user, role: "user" });
   id = new ObjectId(id);
@@ -1892,8 +1941,8 @@ const returnOder = async (req, res) => {
     await user.save();
     let payDB = await Payment.findOne({ orderId: oder._id });
     payDB.payed = false;
+    payDB.oderStatus = "Returned"
     await payDB.save();
-    if (oder.paymentId.method != "COD") {
       let walletDB = await Wallet.findOne({ userId: user._id });
       if (!walletDB) {
         walletDB = new Wallet({
@@ -1903,9 +1952,12 @@ const returnOder = async (req, res) => {
       }
       walletDB.balance = walletDB.balance + Number(oder.totalAmount);
       await walletDB.save();
-    }
     res.status(200).json({ cancel: true });
   }
+} catch (error) {
+  console.error("Error fetching page:", error);
+  res.redirect({ error: "Something went wrong " });
+}
 };
 
 const orderView = async (req, res) => {
@@ -2097,14 +2149,22 @@ const showWallet = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.session.user, role: "user" });
     const category = await Category.find({ isDeleted: false });
-    let payDB = await Payment.find({ userId: user._id });
-    payDB = payDB.filter((item) => item.method === "wallet");
     const wallet = await Wallet.findOne({ userId: user._id });
+    let allOrders = await Order.find();
+    allOrders = allOrders.filter(
+      (order) => !(
+        (["pending", "delivered", "cancelled"].includes(order.status) && order.paymentId.method === "COD") ||
+        (!["COD", "wallet"].includes(order.paymentId.method) && ["pending", "delivered"].includes(order.status))
+      )
+    );
+    allOrders = allOrders.map(order => order.paymentId?.paymentId).filter(id => id);
+    allOrders = allOrders.map(id => new ObjectId(id));
+    let payDB = await Payment.find({ _id: { $in: allOrders } });
+    payDB.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     let val = true;
     if (!wallet) {
       val = false;
     }
-    payDB.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     res.render("user/user-wallet", {
       category: category,

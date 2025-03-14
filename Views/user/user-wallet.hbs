@@ -198,7 +198,7 @@
                                             {{!-- <th>Transaction ID</th> --}}
                                             <th>Order ID</th>
                                             <th>Amount</th>
-                                            <th>Payment Method</th>
+                                            <th>Order Status</th>
                                             <th>Date</th>
                                             <th>Status</th>
                                         </tr>
@@ -214,7 +214,7 @@
                                             {{else}}
                                             <td class="text-success m-1">₹{{amount}}</td>
                                             {{/if}}
-                                            <td class="m-1">{{method}}</td>
+                                            <td class="m-1">{{oderStatus}} ({{method}})</td>
                                             <td class="m-1">{{formatDate createdAt}}</td>
                                             {{#if payed}}
                                             <td class="m-1"><span class="badge bg-danger">Debited</span></td>

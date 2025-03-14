@@ -3,6 +3,7 @@ const Category = require("../Models/categoryModel");
 const Product = require("../Models/productModel");
 const Order = require("../Models/ordersModel");
 const Coupon = require("../Models/couponModel");
+const Brand = require("../Models/brandModel");
 const upload = require("../Configure/multerConfig");
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
@@ -19,12 +20,37 @@ const sessionCheck = function (req, res, next) {
   if (req.session.admin) {
     next();
   } else {
-    res.render("admin/admin-login", { warning: req.session.warning });
+    res.render("admin/admin-login", { 
+      warning: req.session.warning,
+    });
   }
 };
 
-const login = function (req, res) {
-  res.render("admin/admin-home");
+const login = async function (req, res) {
+    let products = await Product.find({ isDeleted: false, categoryDeleted: false });
+    products = products.sort((a, b) => b.sale - a.sale).slice(0, 10);
+    let midProduct = Math.ceil(products.length / 2);
+    let [firstHalf, secondHalf] = [products.slice(0, midProduct), products.slice(midProduct)];
+    let categories = await Category.find({ isDeleted: false });
+    categories.sort((a, b) => b.sale - a.sale);
+    let label = [];
+    categories.forEach((category) =>{
+      label.push({name : category.categoryName, sale : category.sale ?? 0});
+    })
+    let brand = await Brand.find();
+    brand.sort((a, b) => b.sale - a.sale);
+    let mid = Math.ceil(brand.length / 2);
+    let firstHalfBrand = brand.slice(0, mid);
+    let secondHalfBrand = brand.slice(mid);
+
+  res.render("admin/admin-home",{
+    firstHalf,
+    secondHalf,
+    label,
+    firstHalfBrand,
+    secondHalfBrand,
+    mid,
+  });
 };
 
 const loginSub = async function (req, res) {
@@ -756,7 +782,13 @@ const addProductSub = function (req, res) {
           updatedBy: req.session.admin,
         });
         await product.save();
-
+        let brand = await Brand.findOne({ name : addProduct.brand })
+        if(!brand){
+          brand = new Brand({
+            name: addProduct.brand,
+          });
+          await brand.save();
+        }
         res.render("admin/admin-product", {
           products: await Product.find(),
           searchText: "Search by Name , Brand & Category",
@@ -1057,6 +1089,13 @@ const editProductSub = async function (req, res) {
             updatedBy: req.session.admin,
           },
         });
+        let brand = await Brand.findOne({ name : editProductData.brand })
+        if(!brand){
+          brand = new Brand({
+            name: addProduct.brand,
+          });
+          await brand.save();
+        }
         res.render("admin/admin-product", {
           products: await Product.find(),
           searchText: "Search by Name , Brand & Category",
@@ -1130,12 +1169,6 @@ const orderManagement = async function (req, res) {
     });
   }
 };
-
-
-
-
-
-
 
 const orderStatus = async function (req, res) {
   try {
@@ -1450,6 +1483,7 @@ const report = async (req, res) => {
     let filter = req.body ?? "";
     let isFilter = false;
     let data = [];
+    let reportData = null
     if (filter.filter) {
       isFilter = true;
       if (filter.filter == "Total") {
@@ -1666,13 +1700,18 @@ const report = async (req, res) => {
         { $sort: { _id: -1 } },
       ]);
       data = resultDay;
-       page = parseInt(req.query.page) || 1;
-     let limit = 5; 
-     let skip = (page - 1) * limit;
-     let totalItems = data.length;
+      reportData = data
+      page = parseInt(req.query.page) || 1;
+      let limit = 5; 
+      let skip = (page - 1) * limit;
+      let totalItems = data.length;
       totalPages = Math.ceil(totalItems / limit);
-     data = data.slice(skip, skip + limit);
+      data = data.slice(skip, skip + limit);
     }
+    if(reportData == null){
+      reportData = data;
+    }
+  
 
     res.render("admin/admin-report", {
       filteredData: filter,
@@ -1680,6 +1719,7 @@ const report = async (req, res) => {
       data: data,
       currentPage: page, 
       totalPages,
+      reportData,
     });
   } catch (error) {
     console.error("Error fetching page:", error);

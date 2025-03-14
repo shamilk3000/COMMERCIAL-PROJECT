@@ -36,13 +36,11 @@ window.onload = async function () {
     console.error("Error fetching address:", error);
   }
   if (address.length == 0) {
-    console.log("hide worked");
     document.querySelectorAll(".toHide").forEach((element) => {
       element.style.display = "none";
     });
   } else {
     address.forEach((item, i) => {
-      console.log("address worked");
       document.getElementById("selectAdrs").innerHTML += `
         <div class="form-check col-md-4 mb-2 p-1 border border-black rounded-3 me-0 position-relative">
     <input class="form-check-input position-absolute mt-1 ms-1 groupCheckbox" 
@@ -60,6 +58,7 @@ window.onload = async function () {
   }
 
   check();
+  deliveryCheck();
 };
 
 function check() {
@@ -72,7 +71,25 @@ function check() {
   } else {
     document.getElementById("showWallet").hidden = false;
   }
+  if (total > 1000) {
+    document.getElementById("showCOD").hidden = true;
+  } else {
+    document.getElementById("showCOD").hidden = false;
+  }
 }
+function deliveryCheck(){
+  let total = document.getElementById("total").innerText;
+  let bal = document.getElementById("balence").innerText;
+  total = Number(total);
+  if(total < 1000){console.log("first")
+    document.getElementById("showDel").style.display = "flex";
+    document.getElementById("total").innerText = total + 100
+    document.getElementById("deliveryCharge").value = "true"
+  }else{console.log("worked")
+    document.getElementById("showDel").style.display = "none";
+  }
+}
+
 
 document.getElementById("selectAdrs").addEventListener("change", function (e) {
   if (e.target.classList.contains("groupCheckbox")) {
@@ -230,6 +247,12 @@ document
     } else if (paymentType == "upi") {
       try {
         let total = document.getElementById("totalAmount").value;
+        let deliveryCharge = document.getElementById("deliveryCharge").value;
+        if(deliveryCharge == "true"){
+          console.log("worked")
+          total = Number(total)+100
+          console.log(total)
+        }
         const response = await fetch("/api/razorpayapi", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -280,6 +303,7 @@ document
                   }
                 });
               } else {
+                paymentFail()
                 Swal.fire({
                   title: "SORRY!",
                   text: "Payment Verification Failed!",
@@ -288,6 +312,7 @@ document
                 });
               }
             } catch (error) {
+              paymentFail()
               Swal.fire({
                 title: "SORRY!",
                 text: "Payment Verification Failed!",
@@ -306,6 +331,30 @@ document
 
         const rzp1 = new Razorpay(options);
         rzp1.open();
+
+        function paymentFail(){
+          var paymentFailedModal = new bootstrap.Modal(document.getElementById("paymentFailedModal"));
+          paymentFailedModal.show();
+        }
+
+        rzp1.on("payment.failed", function () {
+          var paymentFailedModal = new bootstrap.Modal(document.getElementById("paymentFailedModal"));
+          paymentFailedModal.show();
+        });
+      
+        rzp1.on("modal.closed", function () {
+          var paymentFailedModal = new bootstrap.Modal(document.getElementById("paymentFailedModal"));
+          paymentFailedModal.show();
+        });
+
+        document.getElementById("pay-again-btn").onclick = function () {
+          rzp1.open();
+          var paymentFailedModal = document.getElementById("paymentFailedModal");
+          var modalInstance = bootstrap.Modal.getInstance(paymentFailedModal);
+          if (modalInstance) {
+              modalInstance.hide(); 
+          }
+        };
       } catch (error) {
         console.log(error);
         Swal.fire({

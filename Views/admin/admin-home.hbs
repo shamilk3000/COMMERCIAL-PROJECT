@@ -1,8 +1,9 @@
 <head>
   <link rel="stylesheet" href="http://127.0.0.1:5000/stylesheets/admin/admin-home.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-  <div class="container">
+  <div class="container-fluid">
     <a class="navbar-brand ms-5 py-0 my-0" href="#"><img src="http://127.0.0.1:5000/images/user/logo.webp" width="100px"
         alt=""></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -20,18 +21,88 @@
   </div>
 </nav>
 
-<main class="container-fluid d-flex justify-content-center align-items-center">
-  <div class="list-group col-md-4 col-sm-12">
-    <a href="/admin/" class="list-group-item list-group-item-action active" aria-current="true">Home</a>
-    <a href="/admin/report" class="list-group-item list-group-item-action " >Sales Report</a>
-    <a href="/admin/userManagement" class="list-group-item list-group-item-action">User Management</a>
-    <a href="/admin/category" class="list-group-item list-group-item-action">Category Management</a>
-    <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
-    <a href="/admin/productManagement" class="list-group-item list-group-item-action">Product Management</a>
-    <a href="/admin/orderManagement" class="list-group-item list-group-item-action">Order Management</a>
-    <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+<main class="container-fluid ">
+  <div class="row">
+    <div class="col-md-3 mt-5">
+      <div class="list-group">
+          <a href="/admin/" class="list-group-item list-group-item-action active" aria-current="true">Home</a>
+          <a href="/admin/report" class="list-group-item list-group-item-action " >Sales Report</a>
+          <a href="/admin/userManagement" class="list-group-item list-group-item-action">User Management</a>
+          <a href="/admin/category" class="list-group-item list-group-item-action">Category Management</a>
+          <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
+          <a href="/admin/productManagement" class="list-group-item list-group-item-action">Product Management</a>
+          <a href="/admin/orderManagement" class="list-group-item list-group-item-action">Order Management</a>
+          <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+
+        <main class="container my-4">
+        <div class="container-box">
+            <h2 class="text-center mb-4">🔥 Best Selling Products</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group">
+                      {{#each firstHalf}}
+                        <li class="list-group-item">{{increment @index}} - {{name}} (Total Sales : {{sale}})</li>
+                      {{/each}}
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group">
+                      {{#each secondHalf}}
+                        <li class="list-group-item">{{incrementTwoValue 5 @index}} - {{name}} (Total Sales : {{sale}})</li>
+                      {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-box mt-4">
+            <h2 class="text-center">📊 Category Overview</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group">
+                      {{#each label}}
+                        <li class="list-group-item">{{increment @index}} - {{this.name}} (Total Sales : {{sale}})</li>
+                      {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-box mt-4">
+            <h2 class="text-center">🏆 Best Selling Brands</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group">
+                      {{#each firstHalfBrand}}
+                        <li class="list-group-item">{{increment @index}} - {{this.name}} (Total Sales : {{sale}})</li>
+                      {{/each}}
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group">
+                      {{#each secondHalfBrand}}
+                        <li class="list-group-item">{{incrementTwoValue mid @index}} - {{name}} (Total Sales : {{sale}})</li>
+                      {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    </div>
   </div>
+  
 </main>
+
+<div hidden>
+  <input type="hidden" value="{{json label}}" id="label">
+</div>
 
 <footer class="bg-dark text-light py-4">
   <div class="container">
@@ -47,3 +118,36 @@
     </div>
   </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    let label = JSON.parse(document.getElementById("label").value);
+    label.sort((a, b) => a.sale - b.sale);
+    let labelName = [];
+    let data = [];
+    label.forEach((item) => {
+        labelName.push(item.name);
+        data.push(item.sale);
+    });
+    function getRandomColors(count) {
+    let colors = [];
+    for (let i = 0; i < count; i++) {
+        let hue = Math.floor((360 / count) * i + Math.random() * 30); 
+        let color = `hsl(${hue}, 70%, 50%)`; 
+        colors.push(color);
+    }
+    return colors;
+}
+const categoryColors = getRandomColors(label.length);
+        const ctx = document.getElementById('categoryChart');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labelName,
+                datasets: [{
+                    data: data,
+                    backgroundColor: categoryColors
+                }]
+            }
+        });
+    </script>

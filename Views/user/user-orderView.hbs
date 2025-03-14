@@ -105,10 +105,20 @@
                 <div class="container mt-5 ">
                     <div class="card p-4 border bg-light">
                         <h4 class="text-center fw-bold">ORDER DETAILS</h4>
+
                         <div class="row align-items-center">
                             <div class="col-md-4">
                                 <!-- Product Image -->
-                                <p class="mb-3"><strong>Order ID :</strong> {{order._id}}</p>
+                                <p class="mb-2"><strong>Order ID :</strong> {{order._id}}</p>
+                                <div class="d-flex mb-2">
+                                    <p class="mt-1 mb-0"><strong>Total : {{order.totalAmount}}</strong></p>
+                                    <input type="hidden" id="invoiceData" value="{{json order}}">
+                                    <button id="downloadInvoiceBtn"
+                                        class="btn btn-success d-flex align-items-center gap-2 shadow-lg px-3 py-2 rounded-pill ms-auto"
+                                        onclick="generateInvoice()">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> Download Invoice
+                                    </button>
+                                </div>
                                 <div id="carouselExampleFade" class="carousel slide carousel-fade">
                                     <div class="carousel-inner">
 
@@ -125,7 +135,8 @@
                                                     <h6 class="mb-1">{{name}}</h6>
                                                     <p class="mb-1">Color: {{selectedColor}}</p>
                                                     <p class="mb-1 ">Qnty: {{quantity}}</p>
-                                                    <p class="mb-1 ">MRP: {{price}} x {{quantity}} = ₹{{totalPrice}}</p>
+                                                    <p class="mb-1 ">MRP: {{offerPrice}} x {{quantity}} =
+                                                        ₹{{totalPrice}}</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -143,6 +154,7 @@
                                         <span class="visually-hidden">Next</span>
                                     </button>
                                 </div>
+
                             </div>
 
 
@@ -168,10 +180,10 @@
                                 {{/if}}
 
                                 {{#if order.deliveryStatus.return}}
-                                     <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.returnDate}} :
+                                <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.returnDate}} :
                                     Your order has been returned.</p>
                                 {{else}}
-                                 {{#if order.deliveryStatus.cancelled}}
+                                {{#if order.deliveryStatus.cancelled}}
                                 <p class="mb-1"><strong>✔</strong> {{formatDate2 order.deliveryStatus.cancelledDate}} :
                                     Your order has been cancelled.</p>
                                 {{/if}}
@@ -192,7 +204,9 @@
                                 </ul>
                                 <div class="text-center mt-3">
                                     {{#if order.deliveryStatus.delivered }}
-                                     <button type="button" class="btn btn-danger px-4 py-2" {{#if (eq order.status "returned" )}}disabled{{/if}}{{#if isReturnExpired}}disabled{{/if}} onclick="returnOdr('{{order._id}}')">{{#if (eq order.status "returned")}}Order
+                                    <button type="button" class="btn btn-danger px-4 py-2" {{#if (eq
+                                        order.status "returned" )}}disabled{{/if}}{{#if isReturnExpired}}disabled{{/if}}
+                                        onclick="returnOdr('{{order._id}}')">{{#if (eq order.status "returned")}}Order
                                         Returned {{else}}Return Order{{/if}}</button>
                                     {{else}}
                                     <button type="button" class="btn btn-danger px-4 py-2" {{#if
@@ -202,7 +216,7 @@
                                         order.status "cancelled" )}}disabled{{/if}}
                                         onclick="cancel('{{order._id}}')">{{#if (eq order.status "cancelled")}}Order
                                         Cancelled {{else}}Cancel Order{{/if}}</button>
-                                        {{/if}}
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
@@ -257,7 +271,7 @@
                         <i class="bi bi-envelope"></i>
                     </a>
                     <a href="https://twitter.com/" target="_blank" class="text-light text-decoration-none">
-                        <i class="bi bi-twitter"></i> <!-- Twitter Icon -->
+                        <i class="bi bi-twitter"></i> 
                     </a>
                 </div>
             </div>
@@ -265,4 +279,5 @@
     </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="http://127.0.0.1:5000/javascripts/user/user-orderView.js"></script>

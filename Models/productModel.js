@@ -70,6 +70,11 @@ const productSchema = new mongoose.Schema({
     default: false,
     required: true,
   },
+  sale: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

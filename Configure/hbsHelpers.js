@@ -47,6 +47,10 @@ module.exports = {
     return ""; 
   },
 
+  incrementTwoValue: (inc , value) => {
+    return parseInt(inc) + parseInt(value) + 1;
+  },
+
   increment: (value) => {
     return parseInt(value) + 1;
   },

@@ -44,6 +44,6 @@ app.use("/", usersRouter);
 
 app.listen(env.port, () => {
   const date = new Date().toString();
-  console.log("Server started at " + date);
   console.log("Server started on port 5000");
+  console.log("Server started at " + date);
 });

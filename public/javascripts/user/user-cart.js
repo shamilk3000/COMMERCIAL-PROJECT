@@ -43,6 +43,7 @@ function incButtonC(id) {
   let currentValue = parseInt(quantityInput.value);
   if (currentValue < maxValue) {
     quantityInput.value = currentValue + 1;
+
   } else {
     warn = true;
   }
@@ -68,7 +69,6 @@ function decButtonC(id) {
 }
 
 async function changed(id) {
-  console.log("changed");
   try {
     if (warn) {
       Swal.fire({
@@ -103,7 +103,12 @@ async function changed(id) {
           confirmButtonText: "OK",
         });
       } else {
-        location.reload();
+        document.getElementById(id).value = data.quantity;
+        document.getElementById(id+"total").innerHTML = `&#8377;${data.total}`;
+        let total = document.getElementById("total").innerText;
+        total = Number(total)-Number(data.minus)
+        total = total + Number(data.total)
+        document.getElementById("total").innerText = total;
       }
     }
   } catch (error) {
