@@ -58,7 +58,7 @@ async function generateInvoice() {
   const doc = new jsPDF();
   let invoice = JSON.parse(document.getElementById("invoiceData").value);
 
-  const fontUrl = "http://127.0.0.1:5500/public/font/NotoSans.ttf"; 
+  const fontUrl = "/font/NotoSans.ttf"; 
   const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
 
   function arrayBufferToBase64(buffer) {
