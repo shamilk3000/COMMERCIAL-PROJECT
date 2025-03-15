@@ -1508,12 +1508,11 @@ const placeOder = async (req, res) => {
 
 const placeOderAdrs = async (req, res) => {
   try {
+    let address = null
     const user = await User.findOne({ email: req.session.user, role: "user" });
     const addressDB = await Address.findOne({ userId: user._id });
-    if (addressDB.addresses.length == 0) {
-      addressDB.addresses = [];
-    }
-    res.status(200).json({ address: addressDB.addresses });
+    address = addressDB?.addresses?.length ? addressDB.addresses : [];
+    res.status(200).json({ address: address });
   } catch (error) {
     res.status(500).json({ message: "Server error.", error: error.message });
   }

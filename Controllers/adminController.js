@@ -778,6 +778,7 @@ const addProductSub = function (req, res) {
             data: file.buffer,
             contentType: file.mimetype,
           })),
+          categoryDeleted: categoryDoc.isDeleted,
           createdBy: req.session.admin,
           updatedBy: req.session.admin,
         });
@@ -1085,6 +1086,7 @@ const editProductSub = async function (req, res) {
               data: file.buffer,
               contentType: file.mimetype,
             })),
+            categoryDeleted: categoryDoc.isDeleted,
             updatedAt: date,
             updatedBy: req.session.admin,
           },
@@ -1092,7 +1094,7 @@ const editProductSub = async function (req, res) {
         let brand = await Brand.findOne({ name : editProductData.brand })
         if(!brand){
           brand = new Brand({
-            name: addProduct.brand,
+            name: editProductData.brand,
           });
           await brand.save();
         }
@@ -1113,7 +1115,7 @@ const editProductSub = async function (req, res) {
           category: categoryDoc._id,
           brand: editProductData.brand,
           name: editProductData.name,
-          size: editProduct.size,
+          size: editProductData.size,
         });
         if (exist) {
           res.render("admin/admin-editProduct", {
