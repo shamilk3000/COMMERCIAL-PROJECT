@@ -2149,7 +2149,7 @@ const showWallet = async (req, res) => {
     const user = await User.findOne({ email: req.session.user, role: "user" });
     const category = await Category.find({ isDeleted: false });
     const wallet = await Wallet.findOne({ userId: user._id });
-    let allOrders = await Order.find();
+    let allOrders = await Order.find({userId : user._id});
     allOrders = allOrders.filter(
       (order) => !(
         (["pending", "delivered", "cancelled"].includes(order.status) && order.paymentId.method === "COD") ||
