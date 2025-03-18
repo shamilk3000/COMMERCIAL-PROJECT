@@ -82,7 +82,11 @@
                                 <div class="col-md-6">
                                     <label for="size" class="form-label">Size</label>
                                     <select class="form-select" id="sizeInput" name="size" aria-readonly="true">
-                                        <option class=" bg-light" value="{{size}}" selected>{{size}}</option>
+                                        <option class="bg-light" value="S - Small" {{#if (eq size "S - Small")}}selected{{/if}}>S - Small</option>
+                                        <option class="bg-light" value="M - Medium" {{#if (eq size "M - Medium")}}selected{{/if}}>M - Medium</option>
+                                        <option class="bg-light" value="L - Large" {{#if (eq size "L - Large")}}selected{{/if}}>L - Large</option>
+                                        <option class="bg-light" value="XL - Extra Large" {{#if (eq size "XL - Extra Large")}}selected{{/if}}>XL - Extra Large</option>
+                                        <option class="bg-light" value="XXL - Double Large" {{#if (eq size "XXL - Double Large")}}selected{{/if}}>XXL - Double Large</option>
                                     </select>
                                 </div>
 
