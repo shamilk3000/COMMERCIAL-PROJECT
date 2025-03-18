@@ -1098,11 +1098,21 @@ const editProductSub = async function (req, res) {
           });
           await brand.save();
         }
+        let page = parseInt(req.query.page) || 1;
+        let limit = 5; 
+        let skip = (page - 1) * limit;
+        let products = await Product.find();
+        products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        let totalItems = products.length;
+        let totalPages = Math.ceil(totalItems / limit);
+        products = products.slice(skip, skip + limit);
         res.render("admin/admin-product", {
-          products: await Product.find(),
+          products: products,
           searchText: "Search by Name , Brand & Category",
           categoryDB: await Category.find(),
           warning: `${editProductData.brand}'s ${editProductData.name} in the ${categoryDoc.categoryName}'s category  has been successfully updated`,
+          currentPage: page, 
+          totalPages,
         });
       }
 
