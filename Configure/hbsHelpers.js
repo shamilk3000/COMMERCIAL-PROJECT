@@ -47,8 +47,8 @@ module.exports = {
     return ""; 
   },
 
-  incrementTwoValue: (inc , value) => {
-    return parseInt(inc) + parseInt(value) + 1;
+  incrementTwoValue: (incn , value) => {
+    return Number(incn) + Number(value) + 1;
   },
 
   increment: (value) => {
