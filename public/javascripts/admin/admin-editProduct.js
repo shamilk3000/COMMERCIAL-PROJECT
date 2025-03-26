@@ -92,7 +92,14 @@ window.onload = function () {
       // Parse and process the input colors
       const colorArray = newColors
         .split(",") // Split by comma
-        .filter((item) => item.includes("-")) // Filter valid colors with '-' (key-value)
+        .filter((item) => {
+          // Ensure only one '-' is present
+          if (item.includes("-") && item.split("-").length === 2) {
+            let [left, right] = item.split("-");
+            return isNaN(left) && !isNaN(right); // Left must be a string, right must be a number
+          }
+          return false;
+        })
         .map((item) => {
           const [key, value] = item.split("-");
           if (!key || isNaN(value)) return null;
