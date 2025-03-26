@@ -34,6 +34,7 @@ router.put("/api/orderStatus", admin.sessionCheck, admin.orderStatus);
 router.get("/pending", admin.sessionCheck, admin.pending);
 router.get("/delivered", admin.sessionCheck, admin.delivered);
 router.get("/cancelled", admin.sessionCheck, admin.cancelled);
+router.get("/returned", admin.sessionCheck, admin.returned);
 router.post("/orderSearch", admin.sessionCheck, admin.orderSearch);
 router.post("/api/addCoupon", admin.sessionCheck, admin.addCoupon);
 router.patch("/api/editCoupon", admin.sessionCheck, admin.editCoupon);

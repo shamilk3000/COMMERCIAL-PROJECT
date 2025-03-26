@@ -23,10 +23,10 @@
 
 <main class="container-fluid ">
   <div class="row">
-    <div class="col-md-3 mt-5">
+    <div class="col-md-2 mt-5">
       <div class="list-group">
           <a href="/admin/" class="list-group-item list-group-item-action active" aria-current="true">Home</a>
-          <a href="/admin/report" class="list-group-item list-group-item-action " >Sales Report</a>
+          {{!-- <a href="/admin/report" class="list-group-item list-group-item-action " >Sales Report</a> --}}
           <a href="/admin/userManagement" class="list-group-item list-group-item-action">User Management</a>
           <a href="/admin/category" class="list-group-item list-group-item-action">Category Management</a>
           <a href="/admin/offers" class="list-group-item list-group-item-action">Coupon</a>
@@ -35,29 +35,33 @@
           <a href="/admin/logOut" class="list-group-item list-group-item-action">LogOut</a>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-10">
 
         <main class="container my-4">
           {{!-- <button type="button" class="btn btn-outline-primary">Sales Report</button> --}}
-        <div class="container-box">
-            <h2 class="text-center mb-4">🔥 Best Selling Products</h2>
+       <div class="container-box">
+            <div class="position-relative mb-4">
+                <h2 class="text-center mb-0">🔥 Best Selling Products</h2>
+                <button class="btn btn-danger position-absolute top-0 end-0"><a href="/admin/report" style="text-decoration: none;color: white;">Sales Report</a></button>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <ul class="list-group">
-                      {{#each firstHalf}}
+                        {{#each firstHalf}}
                         <li class="list-group-item">{{increment @index}} - {{name}} (Total Sales : {{sale}})</li>
-                      {{/each}}
+                        {{/each}}
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <ul class="list-group">
-                      {{#each secondHalf}}
+                        {{#each secondHalf}}
                         <li class="list-group-item">{{incrementTwoValue 5 @index}} - {{name}} (Total Sales : {{sale}})</li>
-                      {{/each}}
+                        {{/each}}
                     </ul>
                 </div>
             </div>
         </div>
+
 
         <div class="container-box mt-4">
             <h2 class="text-center">📊 Category Overview</h2>

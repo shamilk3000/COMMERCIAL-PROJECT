@@ -26,10 +26,15 @@ window.onload = function () {
 
 // tym set
 const timerElement = document.getElementById("timer");
-let timeLeft = 300; // Timer duration in seconds
+let timeLeft = 300; 
 
 function startTimer() {
   const timerInterval = setInterval(() => {
+    if(timeLeft == 0){
+      document.getElementById("resendOtp").disabled = false;
+    }else{
+      document.getElementById("resendOtp").disabled = true;
+    }
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
     timerElement.textContent = `${minutes.toString().padStart(2, "0")}:${seconds
@@ -53,11 +58,14 @@ startTimer();
 // Resend OTP simulation
 document.getElementById("resendOtp").addEventListener("click", (e) => {
   e.preventDefault();
-  timeLeft = 120; // Reset timer
+  timeLeft = 300; // Reset timer
   startTimer();
   document.getElementById("message").innerHTML =
-    '<div class="text-success">A new OTP has been sent to your email or phone.</div>';
+    '<div class="text-success">A new OTP has been sent to your email.</div>';
   document.getElementById("otpForm").querySelector("button").disabled = false;
+  setTimeout(() => {
+    document.getElementById("sub").submit();
+  }, 2000);
 });
 
 // Form submission

@@ -29,8 +29,17 @@ document
 
     let pass = document.getElementById("password").value.trim();
     let cpass = document.getElementById("confirmpassword").value.trim();
+    let currentpass = document.getElementById("currentpass").value.trim();
 
-    if (
+    if (pass != cpass) {
+      Swal.fire({
+        title: "SORRY!",
+        text: "The password and confirm password do not match.",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+      event.preventDefault();
+    } else if (
       !pass ||
       !cpass 
     ) {
@@ -41,10 +50,12 @@ document
         confirmButtonText: "OK",
       });
       event.preventDefault();
-    } else if (pass != cpass) {
+    }else if (
+      !currentpass
+    ) {
       Swal.fire({
         title: "SORRY!",
-        text: "The password and confirm password do not match.",
+        text: "Enter the current password",
         icon: "info",
         confirmButtonText: "OK",
       });
@@ -60,6 +71,7 @@ document
     try {
         let password = document.getElementById("password").value;
          let confirmPassword = document.getElementById("confirmpassword").value;
+         let currentpass = document.getElementById("currentpass").value;
   
       if (editstart) {
         console.log("changing password...");
@@ -69,12 +81,14 @@ document
           body: JSON.stringify({
             password,
             confirmPassword,
+            currentpass,
           }),
         });
         const data = await response.json();
         if (data.changed == true) {
             document.getElementById("password").value = ""
             document.getElementById("confirmpassword").value = ""
+            document.getElementById("currentpass").value = ""
             Swal.fire({
                 title: "Success!",
                 text: "Password has been changed.",
@@ -84,7 +98,7 @@ document
         } else {
           Swal.fire({
             title: "Sorry!",
-            text: "error changing",
+            text: "Current password is not match",
             icon: "info",
             confirmButtonText: "OK",
           });
@@ -98,16 +112,19 @@ document
   document.getElementById("togglePassword").addEventListener("click", function () {
     let passwordInput = document.getElementById("password");
     let confirmpassword = document.getElementById("confirmpassword");
+    let currentpass = document.getElementById("currentpass");
     let icon = this.querySelector("i");
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         confirmpassword.type = "text";
+        currentpass.type = "text";
         icon.classList.remove("bi-eye-fill");
         icon.classList.add("bi-eye-slash-fill");
     } else {
         passwordInput.type = "password";
         confirmpassword.type = "password";
+        currentpass.type = "password";
         icon.classList.remove("bi-eye-slash-fill");
         icon.classList.add("bi-eye-fill");
     }

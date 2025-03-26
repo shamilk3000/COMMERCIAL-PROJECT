@@ -2025,10 +2025,18 @@ const changePasssub = async (req, res) => {
   try {
     let user = await User.findOne({ email: req.session.user, role: "user" });
     let password = req.body.password;
-    password = await bcrypt.hash(password, 10);
-    user.password = password;
-    await user.save();
-    res.status(200).json({ changed: true });
+    let currentpass = req.body.currentpass 
+    console.log(currentpass)
+    let match = await bcrypt.compare(currentpass, user.password);
+    if(match){
+      password = await bcrypt.hash(password, 10);
+      user.password = password;
+      await user.save();
+      res.status(200).json({ changed: true });
+    }else{
+      res.status(200).json({ changed: false });
+    }
+    
   } catch (error) {
     res.status(500).json({ message: "Server error.", error: error.message });
   }

@@ -1347,6 +1347,46 @@ const cancelled = async function (req, res) {
   }
 };
 
+const returned = async function (req, res) {
+  try {
+    let orders = await Order.find({ status: "returned" });
+    orders.forEach(async (order) => {
+      let user = await User.findById(order.userId);
+      order.user = user.email;
+    });
+    const total = orders.length;
+
+    if (total !== 0) {
+      res.render("admin/admin-order", {
+        searchresult: `${total} returned ${
+          total === 1 ? "order" : "orders"
+        } found`,
+        type: "success",
+        searchText: "Search by user and id",
+        order: orders,
+        button: "r",
+      });
+    } else {
+      res.render("admin/admin-order", {
+        searchresult: `There are no returned orders`,
+        type: "danger",
+        searchText: "Search by user and id",
+        order: orders,
+        button: "r",
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching returned orders:", error);
+    res.render("admin/admin-order", {
+      searchresult: "An error occurred while fetching the returned orders.",
+      type: "danger",
+      searchText: "Search by user and id",
+      order: [],
+      button: "r",
+    });
+  }
+};
+
 const orderSearch = async function (req, res) {
   try {
     let searchText = req.body.search?.toLowerCase() || "";
@@ -1917,6 +1957,7 @@ module.exports = {
   delivered,
   pending,
   cancelled,
+  returned,
   orderSearch,
   offer,
   addCoupon,

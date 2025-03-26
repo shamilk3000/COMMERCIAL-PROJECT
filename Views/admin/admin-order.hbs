@@ -21,6 +21,7 @@
     </nav>
 </header>
 
+<!-- Button to Open Modal -->
 
 
 <div class="container-fluid">
@@ -60,6 +61,8 @@
                                     id="delivered">Delivered</button></a>
                             <a href="/admin/cancelled"><button class="btn btn-light"
                                     id="cancelled">Cancelled</button></a>
+                            <a href="/admin/returned"><button class="btn btn-light"
+                                    id="returned">Returned</button></a>
                         </div>
 
                         <form class="d-flex flex-column pb-3 col-5" role="search" action="/admin/orderSearch"
@@ -135,7 +138,7 @@
                         <div class="col-md-2 d-flex justify-content-center">
                             <h6 class="ms-3"> Total Amount : ₹{{totalAmount}}</h6>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-center">
+                        <div class="col-md-1 d-flex justify-content-center">
                             {{#if (eq status "pending")}}
                             <span class="status-indicator bg-warning mt-1 me-2"></span> Pending
                             {{else}}
@@ -153,7 +156,11 @@
                             {{/if}}
                             {{/if}}
                         </div>
-                        <div class="col-md-2 text-end d-flex justify-content-center">
+                        <div class="col-md-3 text-end d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#addressModal" onclick="address('{{_id}}')">
+                                Delivery  Address
+                            </button>
+                            <input type="hidden" value="{{json address}}" id="{{_id}}">
                             {{#if (eq status "pending")}}
                             <button class="btn btn-warning me-2"
                                 onclick="edit('{{_id}}','{{deliveryStatus.shipped}}','{{deliveryStatus.OutOfDelivery}}','{{deliveryStatus.delivered}}')"
@@ -299,6 +306,69 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" onclick="editSub()" class="btn btn-danger" id="deleteButtontext">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel"> Delivery Address </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addressForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" placeholder="Enter first name" name="firstName" id="firstName" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Enter last name" name="lastName" id="lastName" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" class="form-control" placeholder="Enter email" name="email" id="email" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mobile No</label>
+                            <input type="tel" class="form-control" placeholder="Enter mobile number" name="mobile" id="mobile" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Pincode</label>
+                            <input type="text" class="form-control" placeholder="Enter pincode" name="pincode" id="pincode" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Flat, House no., Building, Apartment</label>
+                            <input type="text" class="form-control" placeholder="Enter address details" name="address" id="address" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Area, Street, Sector, Village</label>
+                            <input type="text" class="form-control" placeholder="Enter area details" name="area" id="area" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Landmark</label>
+                            <input type="text" class="form-control" placeholder="Enter landmark" name="landmark" id="landmark" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Town/City</label>
+                            <input type="text" class="form-control" placeholder="Enter town or city" name="city" id="city" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" placeholder="Enter state" name="state" id="state" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

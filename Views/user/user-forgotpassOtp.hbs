@@ -24,9 +24,9 @@
     </form>
     <div id="message" class="mt-3 text-center"></div>
     <hr />
-    <form action="/rsntPasOtp" method="POST" class="d-flex justify-content-center">
+    <form action="/rsntPasOtp" method="POST" class="d-flex justify-content-center" id="sub">
       <input type="email" name="email" value="{{email}}" hidden />
-      <button type="submit" class="btn btn-danger">Resend OTP</button>
+      <button type="submit" class="btn btn-danger" id="resendOtp">Resend OTP</button>
     </form>
     <div class="d-flex justify-content-center">
       <a href="/backTolog?email={{email}}" class="link-underline-opacity-0 link-danger">Back to LogIn</a>

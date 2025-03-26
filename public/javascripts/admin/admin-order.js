@@ -91,11 +91,13 @@ window.onload = function () {
   const pending = document.getElementById("pending");
   const delivered = document.getElementById("delivered");
   const cancelled = document.getElementById("cancelled");
+  const returned = document.getElementById("returned");
 
   allBtn.classList.replace("btn-danger", "btn-light");
   pending.classList.replace("btn-danger", "btn-light");
   delivered.classList.replace("btn-danger", "btn-light");
   cancelled.classList.replace("btn-danger", "btn-light");
+  returned.classList.replace("btn-danger", "btn-light");
 
   if (button == "p") {
     pending.classList.replace("btn-light", "btn-danger");
@@ -103,7 +105,9 @@ window.onload = function () {
     delivered.classList.replace("btn-light", "btn-danger");
   } else if (button == "c") {
     cancelled.classList.replace("btn-light", "btn-danger");
-  } else if (button != "p" && button != "d" && button != "c") {
+  } else if (button == "r") {
+    returned.classList.replace("btn-light", "btn-danger");
+  } else if (button != "p" && button != "d" && button != "c" && button != "r") {
     allBtn.classList.replace("btn-light", "btn-danger");
   }
 };
@@ -119,3 +123,18 @@ const appendAlert = function (message, type) {
   ].join("");
   alertPlaceholder.append(wrapper);
 };
+
+function address (id) {
+  let add = document.getElementById(id).value;
+  add =  JSON.parse(add)
+  document.getElementById("firstName").value = add.firstName || "";
+  document.getElementById("lastName").value = add.lastName || "";
+  document.getElementById("email").value = add.email || "";
+  document.getElementById("mobile").value = add.mobile || "";
+  document.getElementById("pincode").value = add.pincode || "";
+  document.getElementById("address").value = add.address || "";
+  document.getElementById("area").value = add.area || "";
+  document.getElementById("landmark").value = add.landmark || "";
+  document.getElementById("city").value = add.city || "";
+  document.getElementById("state").value = add.state || "";
+}
