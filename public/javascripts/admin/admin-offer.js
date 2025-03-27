@@ -58,7 +58,15 @@ document
         confirmButtonText: "OK",
       });
       event.preventDefault();
-    }else if (!expiresAt) {
+    } else if (parseInt(offer) <= parseInt(minPrice) || parseInt(offer) >= parseInt(maxPrice)) {
+      Swal.fire({
+        title: "SORRY!",
+        text: "Offer Amount must be between Min Price and Max Price.",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+      event.preventDefault();
+    } else if (!expiresAt) {
       Swal.fire({
         title: "SORRY!",
         text: "Select expire date.",
@@ -186,6 +194,14 @@ document
       Swal.fire({
         title: "SORRY!",
         text: "Max Price must be greater than Min Price.",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+      event.preventDefault();
+    } else if (parseInt(offer) <= parseInt(minPrice) || parseInt(offer) >= parseInt(maxPrice)) {
+      Swal.fire({
+        title: "SORRY!",
+        text: "Offer Amount must be between Min Price and Max Price.",
         icon: "info",
         confirmButtonText: "OK",
       });
