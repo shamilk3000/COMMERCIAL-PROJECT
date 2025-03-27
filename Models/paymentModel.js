@@ -12,6 +12,9 @@ const paymentSchema = new mongoose.Schema({
   paymentId: {
     type: String,
   },
+  payment_oderId : { 
+    type: String,
+  },
   amount: {
     type: Number,
     required: true,

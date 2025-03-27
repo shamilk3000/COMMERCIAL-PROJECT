@@ -1823,7 +1823,7 @@ const download = async (req, res) => {
       const doc = new PDFDocument({ margin: 30 });
       const fontPath = path.join(__dirname, "../public/font/NotoSans.ttf");
       doc.registerFont("NotoSans", fontPath);
-      doc.font("NotoSans"); // 🔥 Use the correct font
+      doc.font("NotoSans");
       filePath = path.join(__dirname, "../public/files/sales_report.pdf");
 
       doc.pipe(fs.createWriteStream(filePath));

@@ -1520,6 +1520,11 @@ const placeOderAdrs = async (req, res) => {
 
 const placeOderSub = async (req, res) => {
   try {
+    function generateOrderId() {
+      const timestamp = Date.now().toString(36).slice(-4); // Short timestamp
+      const randomStr = Math.random().toString(36).substring(2, 6); // 4 random chars
+      return `ORD-${timestamp}${randomStr}`;
+    }
     const coupons = await Coupon.find({ status: "Active" });
     const category = await Category.find({ isDeleted: false });
     let data = req.body;
@@ -1575,6 +1580,7 @@ const placeOderSub = async (req, res) => {
 
     let orderDB = new Order({
       userId: user._id,
+      order_id : generateOrderId(),
       items: data.productsData,
       ...(data.applyed == "true" && {
         couponCode: data.couponCode,
@@ -1616,6 +1622,7 @@ const placeOderSub = async (req, res) => {
       let paymentDB = new Payment({
         userId: user._id,
         orderId: orderDB._id,
+        payment_oderId : data.oderid,
         paymentId: data.paymentDetails.id,
         amount: amount,
         email: data.paymentDetails.email,
@@ -1732,10 +1739,10 @@ const razorpayapi = async (req, res) => {
     const user = await User.findOne({ email: req.session.user, role: "user" });
     let data = req.body;
     const options = {
-      amount: Number(data.total) * 100, // Convert amount to paisa (INR)
+      amount: Number(data.total) * 100, 
       currency: "INR",
       receipt: "order_receipt_" + new Date().getTime(),
-      payment_capture: 1, // Auto-capture payment after success
+      payment_capture: 1, 
     };
     const order = await razorpay.orders.create(options);
     res.json({

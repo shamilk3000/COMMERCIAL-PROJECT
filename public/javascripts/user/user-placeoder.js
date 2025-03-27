@@ -172,11 +172,11 @@ async function applyCoupon() {
       console.error("Error fetching coupon:", error);
     }
 }
-
+let oderid = ""
 document
   .getElementById("placeOderSub")
   .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent form submission by default
+    event.preventDefault(); 
 
     document.getElementById("payment").value = paymentType;
     let firstName = document.getElementById("firstName").value.trim();
@@ -262,7 +262,7 @@ document
         });
 
         const data = await response.json();
-
+        oderid =  data.orderId
         if (!data.success) {
           Swal.fire({
             title: "SORRY!",
@@ -299,6 +299,7 @@ document
                   confirmButtonText: "OK",
                 }).then((result) => {
                   if (result.isConfirmed) {
+                    document.getElementById("oderid").value =  oderid;
                     document.getElementById("placeOderSub").submit();
                   }
                 });
@@ -365,6 +366,7 @@ document
         });
       }
     } else {
+      document.getElementById("oderid").value =  oderid;
       document.getElementById("placeOderSub").submit();
     }
   });
