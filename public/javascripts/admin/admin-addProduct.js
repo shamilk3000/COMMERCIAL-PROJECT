@@ -26,8 +26,6 @@ dropZone.addEventListener("drop", (e) => {
   dropZone.classList.replace("bg-danger", "bg-primary-subtle");
   const files = Array.from(e.dataTransfer.files); // Get the files
   if (files.length > 0) {
-    //only drop
-    // console.log(files.length)
     handleFiles(files);
   }
 });
@@ -53,7 +51,6 @@ function uploading(allFiles) {
 document.getElementById("form").addEventListener("submit", function (event) {
   const filesTotal = document.getElementById("productImage").files;
   if (filesTotal.length < 3) {
-    console.log(filesTotal.length);
     event.preventDefault();
     Swal.fire({
       title: "SORRY!",
@@ -93,14 +90,7 @@ function handleFiles(files) {
     viewImagesBtn.style.display = "inline-block";
     dropZone.classList.replace("bg-danger-subtle", "bg-primary-subtle");
     uploading(uploadedImages);
-    console.log(
-      "after upload:",
-      uploadedImages.map((img, i) => ({
-        id: img.id,
-        index: i,
-        name: img.file.name,
-      }))
-    );
+    
   });
 }
 
@@ -112,14 +102,7 @@ function addId(files) {
 }
 
 function cropImagesToAspectRatio() {
-  console.log(
-    "Before aspect:",
-    uploadedImages.map((img, i) => ({
-      id: img.id,
-      index: i,
-      name: img.file.name,
-    }))
-  );
+  
   // To store the cropped images
   let croppedImages = [];
 
@@ -128,7 +111,6 @@ function cropImagesToAspectRatio() {
 
     reader.onload = function (e) {
       const fileType = file.file.type;
-      console.log(fileType);
       // Check the file type to decide how to handle it
       if (fileType.startsWith("image/")) {
         // Handle image files (e.g., jpg, png, gif, etc.)
@@ -195,7 +177,6 @@ function cropImagesToAspectRatio() {
         img.src = e.target.result;
       } else {
         // If the file is not an image, just skip it (or handle accordingly)
-        console.log("Skipping non-image file:", file);
         if (croppedImages.length === uploadedImages.length) {
           uploadedImages = croppedImages; // Store only the cropped images
         }
@@ -204,14 +185,7 @@ function cropImagesToAspectRatio() {
 
     reader.readAsDataURL(file.file); // Start reading the file
   });
-  console.log(
-    "after aspect:",
-    uploadedImages.map((img, i) => ({
-      id: img.id,
-      index: i,
-      name: img.filename,
-    }))
-  );
+ 
 }
 
 fileInput.addEventListener("change", function (event) {
@@ -221,143 +195,7 @@ fileInput.addEventListener("change", function (event) {
   }
 });
 
-// let cropper; // Declare cropper globally
 
-// function crop(id) {
-//   console.log("Before Cropping:", uploadedImages.map((img, i) => ({ id: img.id, index: i, name: img.file.name })));
-//   console.log("Cropping workaayi");
-
-//   const file = uploadedImages.find(image => image.id === id);
-//   console.log("File to crop:", file ? file.file : "File not found");
-
-//   if (file) {
-//     const reader = new FileReader();
-//     reader.onload = function (e) {
-//       const imgElement = document.getElementById("imagePreview");
-//       imgElement.src = e.target.result;
-
-//       // Make sure the image is loaded before initializing Cropper
-//       imgElement.onload = function () {
-//         // Destroy the previous cropper instance if exists
-//         if (cropper) {
-//           cropper.destroy();
-//         }
-
-//         // Initialize a new cropper instance
-//         cropper = new Cropper(imgElement, {
-//           aspectRatio: 0.8,
-//           viewMode: 2,
-//           autoCropArea: 0.8,
-//           responsive: true,
-//         });
-
-//         // Set up the crop button
-//         document.getElementById("cropButton").addEventListener("click", function () {
-//           const croppedCanvas = cropper.getCroppedCanvas();
-
-//           croppedCanvas.toBlob(function(blob) {
-//             let croppedImageFile = new File([blob], file.file.name, { type: file.file.type });
-//             console.log("croppedImageFile", croppedImageFile);
-
-//             const imageIndex = uploadedImages.findIndex(image => image.id === id);
-//             if (imageIndex !== -1) {
-//               // Replace the image at the found index with the new cropped file
-//               uploadedImages.splice(imageIndex, 1, {
-//                 id: id,
-//                 file: croppedImageFile,
-//               });
-
-//               // Log to ensure the image is updated correctly
-//               console.log("Image after cropping:", uploadedImages[imageIndex]);
-
-//               uploading(uploadedImages); // Assuming you have a function to handle uploading
-//               updateModalImages(); // Update modal with cropped image
-//             } else {
-//               console.error("Image with the specified ID not found.");
-//             }
-
-//             // Reset the modal preview and close the crop modal
-//             document.getElementById("cropmodalImage").innerHTML = `<div class="col-10">
-//               <img id="imagePreview" style="max-width: 100%;" />
-//             </div>`;
-
-//             // Close the crop image modal
-//             const cropimageModalElement = document.getElementById("cropimageModal");
-//             const cropimageModal = bootstrap.Modal.getInstance(cropimageModalElement);
-//             cropimageModal.hide();
-//           }, file.file.type);
-//         });
-//       };
-//     };
-//     reader.readAsDataURL(file.file); // Start reading the file as DataURL
-//   } else {
-//     console.log("Image not found with the specified ID:", id);
-//   }
-
-//   console.log("after Cropping:", uploadedImages.map((img, i) => ({ id: img.id, index: i, name: img.file.name })));
-// }
-
-// // Update modal with resized image previews
-
-// function updateModalImages() {
-//   console.log("Before modal:", uploadedImages);
-
-//   modalImageContainer.innerHTML = ""; // Clear previous images
-
-//   uploadedImages.forEach((file, index) => {
-//     console.log("Uploading file:", file.file);
-
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//       const img = new Image();
-//       img.src = e.target.result;
-
-//       img.onload = () => {
-//         const canvas = document.createElement("canvas");
-//         const ctx = canvas.getContext("2d");
-//         const maxWidth = img.width;
-//         const maxHeight = img.height;
-//         let width = img.width;
-//         let height = img.height;
-
-//         // Resize image logic
-//         if (width > height) {
-//           if (width > maxWidth) {
-//             height = Math.round((height * maxWidth) / width);
-//             width = maxWidth;
-//           }
-//         } else {
-//           if (height > maxHeight) {
-//             width = Math.round((width * maxHeight) / height);
-//             height = maxHeight;
-//           }
-//         }
-
-//         canvas.width = width;
-//         canvas.height = height;
-//         ctx.drawImage(img, 0, 0, width, height);
-
-//         // Create the modal image card
-//         const col = document.createElement("div");
-//         col.className = "col-3"; // Ensure images are arranged in a 3-column grid
-//         col.innerHTML = `
-//           <div class="card">
-//             <p>${file.id}</p>
-//             <img src="${canvas.toDataURL()}" class="card-img-top" alt="Image ${file.id}">
-//             <button class="btn btn-warning btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#cropimageModal" onclick="crop(${file.id})">Crop</button>
-//             <button class="btn btn-danger btn-sm mt-2" onclick="deleteImage(${file.id})">Delete</button>
-//           </div>
-//         `;
-
-//         modalImageContainer.appendChild(col);
-//       };
-//     };
-
-//     reader.readAsDataURL(file.file); // Read image file
-//   });
-
-//   console.log("After modal:", uploadedImages);
-// }
 
 let cropper; // Declare cropper globally
 let isCropping = false; // Flag to prevent multiple cropping actions
@@ -398,7 +236,6 @@ function crop(id) {
             const croppedImageFile = new File([blob], file.file.name, {
               type: file.file.type,
             });
-            console.log("triggered crop");
             // Find the index of the image being cropped
             const imageIndex = uploadedImages.findIndex(
               (image) => image.id === id
@@ -444,7 +281,6 @@ function crop(id) {
 }
 
 function updateModalImages() {
-  console.log("Updating modal images...");
 
   // Clear the modal images container
   modalImageContainer.innerHTML = ""; // Clear any old images
@@ -523,9 +359,7 @@ function deleteImage(id) {
   const indexToRemove = uploadedImages.findIndex((image) => image.id === id);
   if (indexToRemove !== -1) {
     uploadedImages.splice(indexToRemove, 1);
-    console.log(`Image with id ${id} removed.`);
   } else {
-    console.log(`Image with id ${id} not found.`);
   } // Remove image from array
   updateFileCount(); // Update the file count label
   uploading(uploadedImages);
@@ -657,7 +491,6 @@ window.onload = function () {
         }
       });
 
-      console.log(colors);
 
       // Clear the input field after adding colors
       $("#newColor").val("");
@@ -675,7 +508,6 @@ window.onload = function () {
     totalValue = selectedColors.reduce((sum, [key, value]) => {
       return sum + Number(value); // Convert value to a number before adding
     }, 0);
-    console.log("totalValue" + totalValue);
     if (totalValue == 0 || totalValue == "") {
       totalValue = 0;
     }
@@ -709,7 +541,6 @@ window.onload = function () {
     totalValue = selectedColors.reduce((sum, [key, value]) => {
       return sum + Number(value); // Convert value to a number before adding
     }, 0);
-    console.log("totalValue" + totalValue);
     if (totalValue == 0 || totalValue == "") {
       totalValue = 0;
     }
@@ -771,7 +602,6 @@ window.onload = function () {
   const [nav] = performance.getEntriesByType("navigation");
 
   if (nav && nav.type === "reload") {
-    console.log("Page was manually refreshed.");
   } else {
     const warning = document.getElementById("warning").innerText;
     if (warning) {
@@ -782,7 +612,6 @@ window.onload = function () {
         confirmButtonText: "OK",
       });
     }
-    console.log("Page loaded for the first time.");
   }
 };
 

@@ -24,7 +24,6 @@ menuOverlay.addEventListener("click", () => {
 // window loadil photo onn maathram kaanikkaan
 window.onload = function () {
   const stockText = document.getElementById("stock").value;
-  console.log(stockText);
   const div = document.getElementById("div");
   document.getElementById("quantity").max = Number(stockText);
   if (stockText == 0) {
@@ -175,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById("color").addEventListener("change", function () {
-  console.log("worked");
   const stock = document.getElementById("stock").value; //totalquantity
   const colour = document.getElementById("colourful").innerText; //dbdata
   const color = document.getElementById("color").value; //colour select
@@ -196,12 +194,10 @@ document.getElementById("color").addEventListener("change", function () {
   if (result) {
     quantity.max = result[1];
     if (result[1] == 0) {
-      console.log(result[1]);
       document.getElementById("cart").disabled = true;
       document.getElementById("buyBtn").disabled = true;
       div.innerHTML = `<h5 class="text-danger mb-4" >Out of Stock</h5>`;
     } else {
-      console.log(result[1]);
       document.getElementById("cart").disabled = false;
       document.getElementById("buyBtn").disabled = false;
       div.innerHTML = `<label for="quantity" class="form-label">Stock Available</label>
@@ -209,7 +205,6 @@ document.getElementById("color").addEventListener("change", function () {
                     <input type="number" id="stockText"  class="form-control text-center" value="${result[1]}" readonly >
                     </div>`;
     }
-    console.log(result[1]); // Output: 7 if "Black", 6 if "Red"
   } else {
     quantity.max = Number(stock);
     if (stock == 0) {
@@ -224,7 +219,6 @@ document.getElementById("color").addEventListener("change", function () {
                     <input type="number" id="stockText"  class="form-control text-center" value="${stock}" readonly >
                     </div>`;
     }
-    console.log("Color not found");
   }
 });
 
@@ -253,8 +247,6 @@ async function addTocart() {
       confirmButtonText: "OK",
     });
   } else if (quantity > stock) {
-    console.log(typeof quantity);
-    console.log(typeof stock);
     Swal.fire({
       title: "SORRY!",
       text: "Stock is not available.",
@@ -262,7 +254,6 @@ async function addTocart() {
       confirmButtonText: "OK",
     });
   } else if (quantity > 10) {
-    console.log(typeof quantity);
     Swal.fire({
       title: "SORRY!",
       text: "The maximum allowable quantity per item in the cart is 10.",
@@ -274,7 +265,6 @@ async function addTocart() {
   }
 
   if (cart == true) {
-    console.log("worked api");
     try {
       const response = await fetch("/api/addTocart", {
         method: "POST",
@@ -291,7 +281,6 @@ async function addTocart() {
           confirmButtonText: "OK",
         });
       }
-      console.log(data);
     } catch (error) {
       console.error("Error adding cart item:", error);
     }
@@ -359,7 +348,6 @@ async function wishlist(id) {
         confirmButtonText: "OK",
       });
     }
-    console.log(data);
   } catch (error) {
     console.error("Error adding wishlist item:", error);
   }

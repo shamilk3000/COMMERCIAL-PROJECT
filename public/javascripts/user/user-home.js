@@ -68,7 +68,6 @@ window.onload = function () {
   const [nav] = performance.getEntriesByType("navigation");
 
   if (nav && nav.type === "reload") {
-    console.log("Page was manually refreshed.");
   } else {
     const completed = document.getElementById("completed").innerText;
     if (completed) {
@@ -88,14 +87,11 @@ window.onload = function () {
         confirmButtonText: "OK",
       });
     }
-    console.log("Page loaded for the first time.");
   }
 
   let search = document.getElementById("filterData").innerText
   if(search != ""){
     search = JSON.parse(search)
-    console.log(search)
-    console.log(typeof search)
 
 
 

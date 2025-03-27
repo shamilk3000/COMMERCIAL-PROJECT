@@ -34,7 +34,6 @@ function updateButtons(id) {
 }
 
 function incButtonC(id) {
-  console.log("incButtonC");
   const quantityInput = document.getElementById(id);
 
   let stock = parseInt(quantityInput.getAttribute("data-stock")) || 10;
@@ -52,7 +51,6 @@ function incButtonC(id) {
 }
 
 function decButtonC(id) {
-  console.log("decButtonC");
   const quantityInput = document.getElementById(id);
 
   let stock = parseInt(quantityInput.getAttribute("data-stock")) || 10;

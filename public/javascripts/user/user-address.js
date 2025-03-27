@@ -157,7 +157,6 @@ document
   });
 
 function edit(index, id) {
-  console.log(index, id);
   let firstName = document.getElementById(`firstName${index}`).value;
   let lastName = document.getElementById(`lastName${index}`).value;
   let email = document.getElementById(`email${index}`).value;
@@ -194,7 +193,6 @@ function edit(index, id) {
     state,
   };
 
-  console.log("Updating Address: ", updatedAddress);
 }
 
 async function addAddress() {
@@ -210,7 +208,6 @@ async function addAddress() {
     let city = document.getElementById("city").value;
     let state = document.getElementById("state").value;
     if (addstart) {
-      console.log("Adding Address");
       const response = await fetch("/api/addAddress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -259,7 +256,6 @@ async function editAddressDB() {
     let state = document.getElementById("editstate").value;
 
     if (editstart) {
-      console.log("editing Address");
       const response = await fetch("/api/editAddress", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -296,7 +292,6 @@ async function editAddressDB() {
 
 async function deleteAddress(id) {
   try {
-    console.log("deleting Address");
     const response = await fetch("/api/deleteAddress", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },

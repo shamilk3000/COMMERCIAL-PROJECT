@@ -74,7 +74,6 @@ document
          let currentpass = document.getElementById("currentpass").value;
   
       if (editstart) {
-        console.log("changing password...");
         const response = await fetch("/api/changePasssub", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

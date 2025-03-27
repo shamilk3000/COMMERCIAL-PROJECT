@@ -56,7 +56,6 @@ window.onload = function () {
   const [nav] = performance.getEntriesByType("navigation");
 
   if (nav && nav.type === "reload") {
-    console.log("Page was manually refreshed.");
   } else {
     const warningInfo = document.getElementById("warningInfo").innerText;
     if (warningInfo) {
@@ -77,7 +76,6 @@ window.onload = function () {
         confirmButtonText: "OK",
       });
     }
-    console.log("Page loaded for the first time.");
   }
 
   const type = document.getElementById("type").innerText;

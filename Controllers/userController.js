@@ -1038,7 +1038,6 @@ const showCart = async function (req, res) {
 const editCart = async function (req, res) {
   try {
     const editCartdata = req.body;
-    console.log(editCartdata)
 
     const user = await User.findOne({ email: req.session.user, role: "user" });
     if (!user) {
@@ -1431,7 +1430,6 @@ const placeOder = async (req, res) => {
             (uc) => uc.couponId.toString() === vc._id.toString()
           ) && new Date(vc.expiresAt) > new Date()
       );
-      console.log(validCoupons);
 
       res.render("user/user-placeoder", {
         category: category,
@@ -1489,7 +1487,6 @@ const placeOder = async (req, res) => {
             (uc) => uc.couponId.toString() === vc._id.toString()
           ) && new Date(vc.expiresAt) > new Date()
       );
-      console.log(validCoupons);
 
       res.render("user/user-placeoder", {
         category: category,
@@ -1521,9 +1518,11 @@ const placeOderAdrs = async (req, res) => {
 const placeOderSub = async (req, res) => {
   try {
     function generateOrderId() {
-      const timestamp = Date.now().toString(36).slice(-4).toUpperCase(); 
-      const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase(); 
-      return `ORD-${timestamp}${randomStr}`;
+      const datePart = new Date().toISOString().slice(8, 10) + // DD
+      new Date().toISOString().slice(5, 7) + // MM
+      new Date().toISOString().slice(2, 4);  // YY
+      const randomNum = Math.floor(100000 + Math.random() * 900000); // 6-digit random number
+      return `ORD-${datePart}${randomNum}`;
     }
     const coupons = await Coupon.find({ status: "Active" });
     const category = await Category.find({ isDeleted: false });
@@ -1542,7 +1541,6 @@ const placeOderSub = async (req, res) => {
     data.productsData = JSON.parse(data.productsData);
     if (data.paymentDetails) {
       data.paymentDetails = JSON.parse(data.paymentDetails);
-      console.log(data.paymentDetails)
     }
     await Promise.all(
       data.productsData.map(async (product) => {
@@ -2032,8 +2030,7 @@ const changePasssub = async (req, res) => {
   try {
     let user = await User.findOne({ email: req.session.user, role: "user" });
     let password = req.body.password;
-    let currentpass = req.body.currentpass 
-    console.log(currentpass)
+    let currentpass = req.body.currentpass
     let match = await bcrypt.compare(currentpass, user.password);
     if(match){
       password = await bcrypt.hash(password, 10);

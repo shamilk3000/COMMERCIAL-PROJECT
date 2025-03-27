@@ -51,7 +51,6 @@ window.onload = function () {
   }
 
   const convertedExistimage = productImageconvertedDB(arr);
-  console.log(convertedExistimage);
   handleFiles(convertedExistimage);
 
   // Initialize color data when the page loads (if there is any pre-selected color data)
@@ -218,7 +217,6 @@ window.onload = function () {
   const [nav] = performance.getEntriesByType("navigation");
 
   if (nav && nav.type === "reload") {
-    console.log("Page was manually refreshed.");
   } else {
     const warning = document.getElementById("warning").innerText;
     if (warning) {
@@ -230,7 +228,6 @@ window.onload = function () {
       });
     }
 
-    console.log("Page loaded for the first time.");
   }
 };
 
@@ -273,14 +270,7 @@ fileInput.addEventListener("change", (e) => {
 });
 
 function cropImagesToAspectRatio() {
-  console.log(
-    "Before aspect:",
-    uploadedImages.map((img, i) => ({
-      id: img.id,
-      index: i,
-      name: img.file.name,
-    }))
-  );
+
   // To store the cropped images
   let croppedImages = [];
 
@@ -289,7 +279,6 @@ function cropImagesToAspectRatio() {
 
     reader.onload = function (e) {
       const fileType = file.file.type;
-      console.log(fileType);
       // Check the file type to decide how to handle it
       if (fileType.startsWith("image/")) {
         // Handle image files (e.g., jpg, png, gif, etc.)
@@ -356,7 +345,6 @@ function cropImagesToAspectRatio() {
         img.src = e.target.result;
       } else {
         // If the file is not an image, just skip it (or handle accordingly)
-        console.log("Skipping non-image file:", file);
         if (croppedImages.length === uploadedImages.length) {
           uploadedImages = croppedImages; // Store only the cropped images
         }
@@ -365,14 +353,7 @@ function cropImagesToAspectRatio() {
 
     reader.readAsDataURL(file.file); // Start reading the file
   });
-  console.log(
-    "after aspect:",
-    uploadedImages.map((img, i) => ({
-      id: img.id,
-      index: i,
-      name: img.filename,
-    }))
-  );
+
 }
 
 fileInput.addEventListener("change", function (event) {
@@ -386,7 +367,6 @@ fileInput.addEventListener("change", function (event) {
 
 function uploading(allFiles) {
   if (allFiles.length === 0) {
-    console.log("No images");
   } else {
     const dataTransfer = new DataTransfer();
     allFiles.forEach((file) => {
@@ -443,20 +423,12 @@ function handleFiles(files) {
     viewImagesBtn.style.display = "inline-block";
     dropZone.classList.replace("bg-danger-subtle", "bg-primary-subtle");
     uploading(uploadedImages);
-    console.log(
-      "after upload:",
-      uploadedImages.map((img, i) => ({
-        id: img.id,
-        index: i,
-        name: img.file.name,
-      }))
-    );
+   
   });
 }
 
 function addId(files) {
   let n = uploadedImages.length;
-  console.log(files);
   files.forEach((file, index) => {
     files[index] = { id: index + n, file };
   });
@@ -503,7 +475,6 @@ function crop(id) {
             const croppedImageFile = new File([blob], file.file.name, {
               type: file.file.type,
             });
-            console.log("triggered crop");
             // Find the index of the image being cropped
             const imageIndex = uploadedImages.findIndex(
               (image) => image.id === id
@@ -549,7 +520,6 @@ function crop(id) {
 }
 
 function updateModalImages() {
-  console.log("Updating modal images...");
 
   // Clear the modal images container
   modalImageContainer.innerHTML = ""; // Clear any old images
@@ -631,9 +601,7 @@ function deleteImage(id) {
   const indexToRemove = uploadedImages.findIndex((image) => image.id === id);
   if (indexToRemove !== -1) {
     uploadedImages.splice(indexToRemove, 1);
-    console.log(`Image with id ${id} removed.`);
   } else {
-    console.log(`Image with id ${id} not found.`);
   } // Remove image from array
   updateFileCount(); // Update the file count label
   uploading(uploadedImages);

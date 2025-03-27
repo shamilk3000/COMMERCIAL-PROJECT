@@ -31,7 +31,7 @@ window.onload = async function () {
     });
     const data = await response.json();
     address = data.address;
-    console.log(address);
+    
   } catch (error) {
     console.error("Error fetching address:", error);
   }
@@ -81,11 +81,11 @@ function deliveryCheck(){
   let total = document.getElementById("total").innerText;
   let bal = document.getElementById("balence").innerText;
   total = Number(total);
-  if(total < 1000){console.log("first")
+  if(total < 1000){
     document.getElementById("showDel").style.display = "flex";
     document.getElementById("total").innerText = total + 100
     document.getElementById("deliveryCharge").value = "true"
-  }else{console.log("worked")
+  }else{
     document.getElementById("showDel").style.display = "none";
   }
 }
@@ -99,7 +99,6 @@ document.getElementById("selectAdrs").addEventListener("change", function (e) {
     e.target.checked = true;
 
     let selectedID = parseInt(e.target.id.replace("option", "")) - 1;
-    console.log("Selected ID:", selectedID);
     let addressData = address[selectedID];
 
     document.getElementById("firstName").value = addressData.firstName;
@@ -140,7 +139,6 @@ async function applyCoupon() {
         body: JSON.stringify({ couponCode }),
       });
       const data = await response.json();
-      console.log(data);
       if (data.messege.length != 0 && !data.apply) {
         Swal.fire({
           title: "SORRY!",
@@ -249,9 +247,7 @@ document
         let total = document.getElementById("totalAmount").value;
         let deliveryCharge = document.getElementById("deliveryCharge").value;
         if(deliveryCharge == "true"){
-          console.log("worked")
           total = Number(total)+100
-          console.log(total)
         }
         const response = await fetch("/api/razorpayapi", {
           method: "POST",
@@ -357,7 +353,6 @@ document
           }
         };
       } catch (error) {
-        console.log(error);
         Swal.fire({
           title: "SORRY!",
           text: "Payment Failed",
@@ -380,7 +375,6 @@ document
           body: JSON.stringify({ couponCode }),
         });
         const data = await response.json();
-        console.log(data);
         if (data.messege.length != 0 && !data.apply) {
           Swal.fire({
             title: "SORRY!",

@@ -24,51 +24,8 @@ menuOverlay.addEventListener("click", () => {
 window.onload = () => {
   const btnid = document.getElementById("button").innerText;
   const btn = document.getElementById(btnid);
-  console.log(btnid);
-  console.log(btn);
   btn.classList.replace("btn-light", "btn-dark");
 };
-//category div show and hide also btm colour changes
-// document.addEventListener('DOMContentLoaded', function() {
-//     const allProductsBtn = document.getElementById('allProductsBtn');
-//     const womenBtn = document.getElementById('womenBtn');
-//     const menBtn = document.getElementById('menBtn');
-
-//     const allProductsDiv = document.getElementById('allProductsDiv');
-//     const womenDiv = document.getElementById('womenDiv');
-//     const menDiv = document.getElementById('menDiv');
-
-//     function setActiveButton(activeBtn) {
-//         [allProductsBtn, womenBtn, menBtn].forEach(btn => {
-//             btn.classList.remove('btn-dark');
-//             btn.classList.add('btn-light');
-//         });
-//         activeBtn.classList.remove('btn-light');
-//         activeBtn.classList.add('btn-dark');
-//     }
-
-//     function showDiv(divToShow) {
-//         [allProductsDiv, womenDiv, menDiv].forEach(div => {
-//             div.style.display = 'none';
-//         });
-//         divToShow.style.display = 'block';
-//     }
-
-//     allProductsBtn.addEventListener('click', function() {
-//         setActiveButton(this);
-//         showDiv(allProductsDiv);
-//     });
-
-//     womenBtn.addEventListener('click', function() {
-//         setActiveButton(this);
-//         showDiv(womenDiv);
-//     });
-
-//     menBtn.addEventListener('click', function() {
-//         setActiveButton(this);
-//         showDiv(menDiv);
-//     });
-// });
 //-----------------------------------------------------------------------------------------------------------------------------
 document
   .getElementById("searchForm")

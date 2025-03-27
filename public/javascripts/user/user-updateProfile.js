@@ -71,7 +71,6 @@ async function editProfile() {
     let mobile = document.getElementById("mobile").value;
 
     if (editstart) {
-      console.log("editing profile");
       const response = await fetch("/api/editProfile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

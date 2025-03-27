@@ -22,7 +22,6 @@ menuOverlay.addEventListener("click", () => {
 
 async function removeFromWishlist(id) {
   try {
-    console.log(id);
     const response = await fetch("/api/removeFromWish", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -40,7 +39,6 @@ async function removeFromWishlist(id) {
         confirmButtonText: "OK",
       });
     }
-    console.log(data);
   } catch (error) {
     console.error("Error remove wishlist item:", error);
   }

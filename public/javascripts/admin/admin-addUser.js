@@ -91,7 +91,6 @@ window.onload = function () {
   const [nav] = performance.getEntriesByType("navigation");
   
   if (nav && nav.type === "reload") {
-    console.log("Page was manually refreshed.");
   } else {
     const existMail = document.getElementById("existMail").innerText;
   if (existMail) {
@@ -102,7 +101,6 @@ window.onload = function () {
       confirmButtonText: "OK",
     });
   };
-    console.log("Page loaded for the first time.");
   }
 };
 

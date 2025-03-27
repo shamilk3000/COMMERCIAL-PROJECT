@@ -21,7 +21,6 @@ menuOverlay.addEventListener("click", () => {
 
 async function cancel(id) {
   try {
-    console.log(id);
     const response = await fetch("/api/cancelOder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -38,7 +37,6 @@ async function cancel(id) {
 
 async function returnOdr(id) {
   try {
-    console.log(id);
     const response = await fetch("/api/returnOder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -158,5 +156,4 @@ function finalizePDF(doc, invoiceData) {
 
 window.onload = function () {
   let invoice = JSON.parse(document.getElementById("invoiceData").value)
-  console.log(invoice)
 }

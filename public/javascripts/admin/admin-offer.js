@@ -95,7 +95,6 @@ async function addCoupon() {
           icon: "error",
           confirmButtonText: "OK",
         });
-        console.log(data)
       }
     }
   } catch (error) {
@@ -126,40 +125,10 @@ function show(code, offer, min, max, id, expire) {
   document.getElementById("editminPrice").value = min;
   document.getElementById("editmaxPrice").value = max;
   document.getElementById("id").value = id;
-  // document.getElementById("isActive").value = status;
-  // if (status == "Active") {
-  //   document.getElementById("isActive").value = "Active";
-  //   activateBtn.classList.add("active");
-  //   activateBtn.classList.remove("inactive");
-  //   blockBtn.classList.remove("block");
-  //   blockBtn.classList.add("inactive");
-  // } else {
-  //   document.getElementById("isActive").value = "Blocked";
-  //   blockBtn.classList.add("block");
-  //   blockBtn.classList.remove("inactive");
-  //   activateBtn.classList.remove("active");
-  //   activateBtn.classList.add("inactive");
-  // }
+ 
 }
 
-// const activateBtn = document.getElementById("activateBtn");
-// const blockBtn = document.getElementById("blockBtn");
 
-// activateBtn.addEventListener("click", () => {
-//   document.getElementById("isActive").value = "Active";
-//   activateBtn.classList.add("active");
-//   activateBtn.classList.remove("inactive");
-//   blockBtn.classList.remove("block");
-//   blockBtn.classList.add("inactive");
-// });
-
-// blockBtn.addEventListener("click", () => {
-//   document.getElementById("isActive").value = "Blocked";
-//   blockBtn.classList.add("block");
-//   blockBtn.classList.remove("inactive");
-//   activateBtn.classList.remove("active");
-//   activateBtn.classList.add("inactive");
-// });
 
 let editstart = false;
 document
@@ -231,7 +200,6 @@ document
       event.preventDefault();
     } else {
       editstart = true;
-      console.log(editstart)
     }
   });
 
