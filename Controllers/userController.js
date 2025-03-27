@@ -1521,8 +1521,8 @@ const placeOderAdrs = async (req, res) => {
 const placeOderSub = async (req, res) => {
   try {
     function generateOrderId() {
-      const timestamp = Date.now().toString(36).slice(-4); // Short timestamp
-      const randomStr = Math.random().toString(36).substring(2, 6); // 4 random chars
+      const timestamp = Date.now().toString(36).slice(-4).toUpperCase(); 
+      const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase(); 
       return `ORD-${timestamp}${randomStr}`;
     }
     const coupons = await Coupon.find({ status: "Active" });

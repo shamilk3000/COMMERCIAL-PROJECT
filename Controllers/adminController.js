@@ -1402,7 +1402,7 @@ const orderSearch = async function (req, res) {
 
     let orderid = await Order.find({}).lean();
     orderid = orderid.filter((order) =>
-      order._id.toString().includes(searchText)
+      order.order_id.toLowerCase().includes(searchText.toLowerCase())
     );
 
     let combinedOrders = [...orders, ...orderid];
