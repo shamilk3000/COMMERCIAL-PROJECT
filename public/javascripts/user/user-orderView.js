@@ -75,14 +75,16 @@ async function generateInvoice() {
 
   doc.setFont("CustomFont", "normal");
 
-  
+  const date = new Date();
+  const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+
   const invoiceData = {
       shopName: "SML BAZAAR",
       shopLogo: "https://i.ibb.co/Pz42nTy9/output-onlinetools.png",
       contact: "+91 984613495 | shamilk3000@gmail.com",
       deliveryAddress: `${invoice.address.firstName} ${invoice.address.lastName}, ${invoice.address.address}, ${invoice.address.area}, ${invoice.address.pincode}, ${invoice.address.city}, ${invoice.address.state}`,
       orderId: invoice.order_id,
-      date: new Date().toLocaleDateString(),
+      date: formattedDate,
       items: invoice.items,
       deliveryCharge: invoice.deliveryCharge,
   };
