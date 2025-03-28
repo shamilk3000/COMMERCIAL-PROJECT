@@ -2,7 +2,6 @@ let addstart = false;
 document
   .getElementById("addCouponForm")
   .addEventListener("submit", function (event) {
-    // Prevent actual form submission
 
     let couponCode = document.getElementById("couponCode").value.trim();
     let offer = document.getElementById("offer").value.trim();
@@ -21,7 +20,7 @@ document
     } else if (couponCode.length != 4) {
       Swal.fire({
         title: "SORRY!",
-        text: "The coupon code must be a four-digit numeric value.",
+        text: "The coupon code must be a four-digit value.",
         icon: "info",
         confirmButtonText: "OK",
       });
@@ -87,10 +86,16 @@ async function addCoupon() {
       let minPrice = document.getElementById("minPrice").value.trim();
       let maxPrice = document.getElementById("maxPrice").value.trim();
       let expiresAt = document.getElementById("expiresAt").value.trim();
+
       const response = await fetch("/admin/api/addCoupon", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ couponCode, offer, minPrice, maxPrice, expiresAt }),
+        body: JSON.stringify({ 
+          couponCode, 
+          offer, 
+          minPrice, 
+          maxPrice, 
+          expiresAt }),
       });
 
       const data = await response.json();
@@ -161,7 +166,7 @@ document
     } else if (couponCode.length != 4) {
       Swal.fire({
         title: "SORRY!",
-        text: "The coupon code must be a four-digit numeric value.",
+        text: "The coupon code must be a four-digit value.",
         icon: "info",
         confirmButtonText: "OK",
       });
@@ -227,7 +232,6 @@ async function editCoupon() {
       let minPrice = document.getElementById("editminPrice").value.trim();
       let maxPrice = document.getElementById("editmaxPrice").value.trim();
       let expiresAt = document.getElementById("editExpiresAt").value.trim();
-      // let status = document.getElementById("isActive").value;
       let id = document.getElementById("id").value;
 
       const response = await fetch("/admin/api/editCoupon", {

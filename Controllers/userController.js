@@ -1422,14 +1422,21 @@ const placeOder = async (req, res) => {
 
       let validCoupons = coupons.filter(
         (coupon) =>
-          totalAmount >= coupon.minPurchase && totalAmount <= coupon.maxPurchase
+          totalAmount >= coupon.minPurchase &&
+          totalAmount <= coupon.maxPurchase &&
+          coupon.discountValue < totalAmount 
       );
+      
       validCoupons = validCoupons.filter(
         (vc) =>
           !user.coupon.some(
             (uc) => uc.couponId.toString() === vc._id.toString()
           ) && new Date(vc.expiresAt) > new Date()
       );
+      validCoupons =
+        validCoupons.length > 0
+          ? validCoupons[Math.floor(Math.random() * validCoupons.length)]
+          : null;
 
       res.render("user/user-placeoder", {
         category: category,
@@ -1438,7 +1445,7 @@ const placeOder = async (req, res) => {
         actualTotalAmount: actualTotalAmount,
         cart: true,
         wallet: wallet,
-        couponAv: validCoupons[0],
+        couponAv: validCoupons,
       });
     } else {
       let totalPrice = "";
@@ -1476,10 +1483,11 @@ const placeOder = async (req, res) => {
         totalPrice: totalPrice,
         category: product.category,
       });
-
       let validCoupons = coupons.filter(
         (coupon) =>
-          totalPrice >= coupon.minPurchase && totalPrice <= coupon.maxPurchase
+          totalPrice >= coupon.minPurchase &&
+          totalPrice <= coupon.maxPurchase &&
+          coupon.discountValue < totalPrice 
       );
       validCoupons = validCoupons.filter(
         (vc) =>
@@ -1487,6 +1495,11 @@ const placeOder = async (req, res) => {
             (uc) => uc.couponId.toString() === vc._id.toString()
           ) && new Date(vc.expiresAt) > new Date()
       );
+      validCoupons =
+        validCoupons.length > 0
+          ? validCoupons[Math.floor(Math.random() * validCoupons.length)]
+          : null;
+     
 
       res.render("user/user-placeoder", {
         category: category,
@@ -1495,7 +1508,7 @@ const placeOder = async (req, res) => {
         actualTotalAmount: actual,
         cart: false,
         wallet: wallet,
-        couponAv: validCoupons[0],
+        couponAv: validCoupons,
       });
     }
   } catch (error) {

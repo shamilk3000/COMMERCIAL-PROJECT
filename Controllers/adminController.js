@@ -1471,10 +1471,10 @@ const addCoupon = async (req, res) => {
   try {
     let added = false;
     let addData = req.body;
-    if (!/^\d{4}$/.test(addData.couponCode)) {
+    if (!/^[a-zA-Z0-9]{4}$/.test(addData.couponCode)) {
       return res.status(400).json({
         added: false,
-        error: "Coupon code must be exactly 4 numeric digits.",
+        error: "Coupon code must be exactly 4 digits.",
       });
     }
     if (parseInt(addData.minPrice) >= parseInt(addData.maxPrice)) {
@@ -1523,7 +1523,6 @@ const editCoupon = async (req, res) => {
       editDataDB.discountValue = editData.offer;
       editDataDB.minPurchase = editData.minPrice;
       editDataDB.maxPurchase = editData.maxPrice;
-      // editDataDB.status = editData.status;
       editDataDB.expiresAt = editData.expiresAt;
 
       await editDataDB.save();
