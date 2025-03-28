@@ -136,3 +136,42 @@ function address (id) {
   document.getElementById("city").value = add.city || "";
   document.getElementById("state").value = add.state || "";
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const shippedYes = document.getElementById("shippedYes");
+  const shippedNo = document.getElementById("shippedNo");
+
+  const outForDeliveryYes = document.getElementById("outForDeliveryYes");
+  const outForDeliveryNo = document.getElementById("outForDeliveryNo");
+
+  const deliveredYes = document.getElementById("deliveredYes");
+  const deliveredNo = document.getElementById("deliveredNo");
+
+  deliveredYes.addEventListener("change", function () {
+      if (deliveredYes.checked) {
+          shippedYes.checked = true;
+          outForDeliveryYes.checked = true;
+      }
+  });
+
+  outForDeliveryYes.addEventListener("change", function () {
+      if (outForDeliveryYes.checked) {
+          shippedYes.checked = true;
+          deliveredNo.checked = true;
+      }
+  });
+
+  shippedNo.addEventListener("change", function () {
+      if (shippedNo.checked) {
+          deliveredNo.checked = true;
+          outForDeliveryNo.checked = true;
+      }
+  });
+
+  outForDeliveryNo.addEventListener("change", function () {
+      if (outForDeliveryNo.checked) {
+          deliveredNo.checked = true;
+      }
+  });
+});

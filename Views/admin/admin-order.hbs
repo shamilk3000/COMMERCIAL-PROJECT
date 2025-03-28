@@ -161,11 +161,11 @@
                                 Delivery  Address
                             </button>
                             <input type="hidden" value="{{json address}}" id="{{_id}}">
-                            {{#if (eq status "pending")}}
+                            {{!-- {{#if (eq status "pending")}} --}}
                             <button class="btn btn-warning me-2"
                                 onclick="edit('{{_id}}','{{deliveryStatus.shipped}}','{{deliveryStatus.OutOfDelivery}}','{{deliveryStatus.delivered}}')"
                                 data-bs-toggle="modal" data-bs-target="#edit">Edit Status</button>
-                            {{else}}
+                            {{!-- {{else}}
                             {{#if (eq status "delivered")}}
                             <button class="btn btn-warning me-2" onclick="edit('{{_id}}')" disabled>Edit Status</button>
                             {{else}}
@@ -178,7 +178,7 @@
                             {{/if}}
                             {{/if}}
                             {{/if}}
-                            {{/if}}
+                            {{/if}} --}}
 
 
 
