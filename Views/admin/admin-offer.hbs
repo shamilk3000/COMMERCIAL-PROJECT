@@ -112,7 +112,27 @@
                     </table>
                 </div>
             </div>
+            <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {{#if (gt currentPage 1)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/offers?page={{subtract currentPage 1}}">Previous</a>
+                        </li>
+                        {{/if}}
 
+                        {{#range 1 totalPages}}
+                        <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                            <a class="page-link" href="/admin/offers?page={{this}}">{{this}}</a>
+                        </li>
+                        {{/range}}
+
+                        {{#if (lt currentPage totalPages)}}
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/offers?page={{add currentPage 1}}">Next</a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </nav>
         </main>
     </div>
 </div>

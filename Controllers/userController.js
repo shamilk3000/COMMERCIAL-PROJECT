@@ -47,6 +47,9 @@ const sessionCheck = function (req, res, next) {
 
 const home = async function (req, res) {
   try {
+    let page = parseInt(req.query.page) || 1;
+    let limit = 8; 
+    let skip = (page - 1) * limit;
     let search = req.body || {};
     let filterData = search;
 
@@ -84,7 +87,7 @@ const home = async function (req, res) {
       },
       { $project: { reviews: 0 } },
     ]);
-    productDB = shuffleArray(productDB);
+    
 
     if (search.filter) {
       if (search.name?.trim()) {
@@ -124,7 +127,10 @@ const home = async function (req, res) {
           productDB.sort(orderFunctions[search.order]);
         }
       }
-
+      // let totalItems = products.length;
+      // let totalPages = Math.ceil(totalItems / limit);
+      // products = products.slice(skip, skip + limit);
+      productDB = shuffleArray(productDB);
       return res.render("user/user-home", {
         filter: true,
         filterData: JSON.stringify(filterData),
@@ -138,6 +144,10 @@ const home = async function (req, res) {
       const filteredProducts = productDB.filter((product) =>
         product.name.toLowerCase().includes(search.searchContent.toLowerCase())
       );
+      // let totalItems = products.length;
+      // let totalPages = Math.ceil(totalItems / limit);
+      // products = products.slice(skip, skip + limit);
+      productDB = shuffleArray(productDB);
       return res.render("user/user-home", {
         search: true,
         resultFor: search.searchContent,
@@ -146,11 +156,16 @@ const home = async function (req, res) {
         category,
       });
     }
-
+    let totalItems = productDB.length;
+    let totalPages = Math.ceil(totalItems / limit);
+    productDB = productDB.slice(skip, skip + limit);
+    productDB = shuffleArray(productDB);
     return res.render("user/user-home", {
       completed,
       products: productDB,
       category,
+      currentPage: page, 
+      totalPages,
     });
   } catch (error) {
     console.error("Error loading home page:", error);

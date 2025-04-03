@@ -1456,10 +1456,18 @@ const orderSearch = async function (req, res) {
 
 const offer = async (req, res) => {
   try {
-    const coupon = await Coupon.find();
+    let page = parseInt(req.query.page) || 1;
+    let limit = 5; 
+    let skip = (page - 1) * limit;
+    let coupon = await Coupon.find();
     coupon.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    let totalItems = coupon.length;
+    let totalPages = Math.ceil(totalItems / limit);
+    coupon = coupon.slice(skip, skip + limit);
     res.render("admin/admin-offer", {
       coupon,
+      currentPage: page, 
+      totalPages,
     });
   } catch (error) {
     console.error("Error updating offer:", error);
