@@ -20,30 +20,36 @@ const sessionCheck = function (req, res, next) {
   if (req.session.admin) {
     next();
   } else {
-    res.render("admin/admin-login", { 
+    res.render("admin/admin-login", {
       warning: req.session.warning,
     });
   }
 };
 
 const login = async function (req, res) {
-    let products = await Product.find({ isDeleted: false, categoryDeleted: false });
-    products = products.sort((a, b) => b.sale - a.sale).slice(0, 10);
-    let midProduct = Math.ceil(products.length / 2);
-    let [firstHalf, secondHalf] = [products.slice(0, midProduct), products.slice(midProduct)];
-    let categories = await Category.find({ isDeleted: false });
-    categories.sort((a, b) => b.sale - a.sale);
-    let label = [];
-    categories.forEach((category) =>{
-      label.push({name : category.categoryName, sale : category.sale ?? 0});
-    })
-    let brand = await Brand.find();
-    brand.sort((a, b) => b.sale - a.sale);
-    let mid = Math.ceil(brand.length / 2);
-    let firstHalfBrand = brand.slice(0, mid);
-    let secondHalfBrand = brand.slice(mid);
+  let products = await Product.find({
+    isDeleted: false,
+    categoryDeleted: false,
+  });
+  products = products.sort((a, b) => b.sale - a.sale).slice(0, 10);
+  let midProduct = Math.ceil(products.length / 2);
+  let [firstHalf, secondHalf] = [
+    products.slice(0, midProduct),
+    products.slice(midProduct),
+  ];
+  let categories = await Category.find({ isDeleted: false });
+  categories.sort((a, b) => b.sale - a.sale);
+  let label = [];
+  categories.forEach((category) => {
+    label.push({ name: category.categoryName, sale: category.sale ?? 0 });
+  });
+  let brand = await Brand.find();
+  brand.sort((a, b) => b.sale - a.sale);
+  let mid = Math.ceil(brand.length / 2);
+  let firstHalfBrand = brand.slice(0, mid);
+  let secondHalfBrand = brand.slice(mid);
 
-  res.render("admin/admin-home",{
+  res.render("admin/admin-home", {
     firstHalf,
     secondHalf,
     label,
@@ -248,7 +254,6 @@ const addUserSub = async function (req, res) {
   try {
     const addUser = req.body;
 
-    
     addUser.isActive = addUser.isActive === "true";
 
     const existingUser = await User.findOne({
@@ -676,7 +681,7 @@ const editCategorySub = async function (req, res) {
 const productManagement = async function (req, res) {
   try {
     let page = parseInt(req.query.page) || 1;
-    let limit = 5; 
+    let limit = 5;
     let skip = (page - 1) * limit;
     let products = await Product.find();
     const categoryDB = await Category.find();
@@ -688,7 +693,7 @@ const productManagement = async function (req, res) {
       products: products,
       categoryDB: categoryDB,
       searchText: "Search by Name, Brand & Category",
-      currentPage: page, 
+      currentPage: page,
       totalPages,
     });
   } catch (error) {
@@ -783,15 +788,15 @@ const addProductSub = function (req, res) {
           updatedBy: req.session.admin,
         });
         await product.save();
-        let brand = await Brand.findOne({ name : addProduct.brand })
-        if(!brand){
+        let brand = await Brand.findOne({ name: addProduct.brand });
+        if (!brand) {
           brand = new Brand({
             name: addProduct.brand,
           });
           await brand.save();
         }
         let page = parseInt(req.query.page) || 1;
-        let limit = 5; 
+        let limit = 5;
         let skip = (page - 1) * limit;
         let products = await Product.find();
         products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1099,15 +1104,15 @@ const editProductSub = async function (req, res) {
             updatedBy: req.session.admin,
           },
         });
-        let brand = await Brand.findOne({ name : editProductData.brand })
-        if(!brand){
+        let brand = await Brand.findOne({ name: editProductData.brand });
+        if (!brand) {
           brand = new Brand({
             name: editProductData.brand,
           });
           await brand.save();
         }
         let page = parseInt(req.query.page) || 1;
-        let limit = 5; 
+        let limit = 5;
         let skip = (page - 1) * limit;
         let products = await Product.find();
         products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1119,7 +1124,7 @@ const editProductSub = async function (req, res) {
           searchText: "Search by Name , Brand & Category",
           categoryDB: await Category.find(),
           warning: `${editProductData.brand}'s ${editProductData.name} in the ${categoryDoc.categoryName}'s category  has been successfully updated`,
-          currentPage: page, 
+          currentPage: page,
           totalPages,
         });
       }
@@ -1163,7 +1168,7 @@ const editProductSub = async function (req, res) {
 const orderManagement = async function (req, res) {
   try {
     let page = parseInt(req.query.page) || 1;
-    let limit = 5; 
+    let limit = 5;
     let skip = (page - 1) * limit;
     let orders = await Order.find();
     orders.forEach(async (order) => {
@@ -1177,7 +1182,7 @@ const orderManagement = async function (req, res) {
     res.render("admin/admin-order", {
       order: orders,
       searchText: "Search by user and id ",
-      currentPage: page, 
+      currentPage: page,
       totalPages,
     });
   } catch (error) {
@@ -1457,7 +1462,7 @@ const orderSearch = async function (req, res) {
 const offer = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
-    let limit = 5; 
+    let limit = 5;
     let skip = (page - 1) * limit;
     let coupon = await Coupon.find();
     coupon.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1466,7 +1471,7 @@ const offer = async (req, res) => {
     coupon = coupon.slice(skip, skip + limit);
     res.render("admin/admin-offer", {
       coupon,
-      currentPage: page, 
+      currentPage: page,
       totalPages,
     });
   } catch (error) {
@@ -1545,16 +1550,18 @@ const editCoupon = async (req, res) => {
 
 const report = async (req, res) => {
   try {
-    let totalPages=null
-    let page=null
+    let totalPages = null;
+    let page = null;
     let filter = req.body ?? "";
     let isFilter = false;
     let data = [];
-    let reportData = null
+    let reportData = null;
     if (filter.filter) {
       isFilter = true;
       if (filter.filter == "Total") {
-        let orders = await Order.find({status: { $nin: ["cancelled", "returned"] }}).lean();
+        let orders = await Order.find({
+          status: { $nin: ["cancelled", "returned"] },
+        }).lean();
         let pay = await Payment.find({
           $nor: [{ method: "COD", payed: false }],
         }).lean();
@@ -1578,7 +1585,7 @@ const report = async (req, res) => {
       } else if (filter.filter == "Weekly") {
         const resultWeek = await Order.aggregate([
           {
-            $match: {status: { $nin: ["cancelled", "returned"] }}
+            $match: { status: { $nin: ["cancelled", "returned"] } },
           },
           {
             $group: {
@@ -1598,8 +1605,6 @@ const report = async (req, res) => {
                   },
                 },
               },
-              firstOrderDate: { $min: "$createdAt" },
-              lastOrderDate: { $max: "$createdAt" },
             },
           },
           {
@@ -1609,14 +1614,26 @@ const report = async (req, res) => {
                   {
                     $dateToString: {
                       format: "%d - %b - %Y",
-                      date: "$firstOrderDate",
+                      date: {
+                        $dateFromParts: {
+                          isoWeekYear: "$_id.year",
+                          isoWeek: "$_id.week",
+                          isoDayOfWeek: 1, // Monday
+                        },
+                      },
                     },
                   },
                   " to ",
                   {
                     $dateToString: {
                       format: "%d - %b - %Y",
-                      date: "$lastOrderDate",
+                      date: {
+                        $dateFromParts: {
+                          isoWeekYear: "$_id.year",
+                          isoWeek: "$_id.week",
+                          isoDayOfWeek: 7, // Sunday
+                        },
+                      },
                     },
                   },
                 ],
@@ -1627,7 +1644,7 @@ const report = async (req, res) => {
               coupon: 1,
             },
           },
-          { $sort: { firstOrderDate: -1 } },
+          { $sort: { _id: -1 } },
         ]);
         data = resultWeek;
       } else if (filter.filter == "Monthly") {
@@ -1655,7 +1672,7 @@ const report = async (req, res) => {
         data = resultMonth;
       } else if (filter.filter == "Yearly") {
         const resultYear = await Order.aggregate([
-          {  $match: {status: { $nin: ["cancelled", "returned"] }} },
+          { $match: { status: { $nin: ["cancelled", "returned"] } } },
           {
             $group: {
               _id: { $dateToString: { format: "%Y", date: "$createdAt" } },
@@ -1767,24 +1784,23 @@ const report = async (req, res) => {
         { $sort: { _id: -1 } },
       ]);
       data = resultDay;
-      reportData = data
+      reportData = data;
       page = parseInt(req.query.page) || 1;
-      let limit = 5; 
+      let limit = 5;
       let skip = (page - 1) * limit;
       let totalItems = data.length;
       totalPages = Math.ceil(totalItems / limit);
       data = data.slice(skip, skip + limit);
     }
-    if(reportData == null){
+    if (reportData == null) {
       reportData = data;
     }
-  
 
     res.render("admin/admin-report", {
       filteredData: filter,
       isFilter: isFilter,
       data: data,
-      currentPage: page, 
+      currentPage: page,
       totalPages,
       reportData,
     });
