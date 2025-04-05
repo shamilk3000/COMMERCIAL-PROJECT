@@ -56,16 +56,16 @@ async function generateInvoice() {
   const doc = new jsPDF();
   let invoice = JSON.parse(document.getElementById("invoiceData").value);
 
-  const fontUrl = "/font/NotoSans.ttf"; 
-  const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
+  const fontUrl = "/font/NotoSans.ttf";
+  const fontData = await fetch(fontUrl).then((res) => res.arrayBuffer());
 
   function arrayBufferToBase64(buffer) {
-      let binary = '';
-      let bytes = new Uint8Array(buffer);
-      for (let i = 0; i < bytes.length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-      }
-      return window.btoa(binary);
+    let binary = "";
+    let bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
 
   const fontBase64 = arrayBufferToBase64(fontData);
@@ -76,40 +76,42 @@ async function generateInvoice() {
   doc.setFont("CustomFont", "normal");
 
   const date = new Date();
-  const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+  const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}/${date.getFullYear()}`;
 
   const invoiceData = {
-      shopName: "SML BAZAAR",
-      shopLogo: "https://i.ibb.co/Pz42nTy9/output-onlinetools.png",
-      contact: "+91 984613495 | shamilk3000@gmail.com",
-      deliveryAddress: `${invoice.address.firstName} ${invoice.address.lastName}, ${invoice.address.address}, ${invoice.address.area}, ${invoice.address.pincode}, ${invoice.address.city}, ${invoice.address.state}`,
-      orderId: invoice.order_id,
-      date: formattedDate,
-      items: invoice.items,
-      deliveryCharge: invoice.deliveryCharge,
+    shopName: "SML BAZAAR",
+    shopLogo: "https://i.ibb.co/Pz42nTy9/output-onlinetools.png",
+    contact: "+91 984613495 | shamilk3000@gmail.com",
+    deliveryAddress: `${invoice.address.firstName} ${invoice.address.lastName}, ${invoice.address.address}, ${invoice.address.area}, ${invoice.address.pincode}, ${invoice.address.city}, ${invoice.address.state}`,
+    orderId: invoice.order_id,
+    date: formattedDate,
+    items: invoice.items,
+    deliveryCharge: invoice.deliveryCharge,
   };
 
-  
   const img = new Image();
-  img.crossOrigin = "Anonymous"; 
+  img.crossOrigin = "Anonymous";
   img.src = invoiceData.shopLogo;
 
   img.onload = function () {
-      doc.addImage(img, "PNG", 10, 10, 30, 30);
-      finalizePDF(doc, invoiceData);
+    doc.addImage(img, "PNG", 10, 10, 30, 30);
+    finalizePDF(doc, invoiceData);
   };
 
   img.onerror = function () {
-      console.error("Failed to load image. Generating PDF without logo.");
-      finalizePDF(doc, invoiceData); 
+    console.error("Failed to load image. Generating PDF without logo.");
+    finalizePDF(doc, invoiceData);
   };
 }
 
 function finalizePDF(doc, invoiceData) {
-  
   const today = new Date();
   const formattedDateInvoice = today.toISOString().split("T")[0];
- 
+
   doc.setFontSize(18);
   doc.text(invoiceData.shopName, 50, 20);
 
@@ -123,31 +125,28 @@ function finalizePDF(doc, invoiceData) {
   doc.text("Delivery Address:", 10, 70);
   doc.text(invoiceData.deliveryAddress, 10, 78, { maxWidth: 180 });
 
-  
   doc.text("Items", 10, 100);
   doc.text("Qty", 90, 100);
   doc.text("Price", 120, 100);
   doc.text("Total", 160, 100);
-  doc.line(10, 105, 200, 105); 
+  doc.line(10, 105, 200, 105);
 
   let y = 110;
   let total = 0;
   invoiceData.items.forEach((item) => {
-      let itemTotal = item.quantity * item.offerPrice;
-      total += itemTotal;
-      doc.text(item.name, 10, y);
-      doc.text(item.quantity.toString(), 90, y);
-      doc.text(`₹${item.offerPrice.toString()}`, 120, y);
-      doc.text(`₹${itemTotal.toString()}`, 160, y);
-      y += 10;
+    let itemTotal = item.quantity * item.offerPrice;
+    total += itemTotal;
+    doc.text(item.name, 10, y);
+    doc.text(item.quantity.toString(), 90, y);
+    doc.text(`₹${item.offerPrice.toString()}`, 120, y);
+    doc.text(`₹${itemTotal.toString()}`, 160, y);
+    y += 10;
   });
-
 
   doc.line(10, y, 200, y);
   doc.text("Delivery Charge:", 120, y + 10);
   doc.text(`₹${invoiceData.deliveryCharge.toString()}`, 160, y + 10);
   total += invoiceData.deliveryCharge;
-
 
   doc.line(10, y + 15, 200, y + 15);
   doc.setFontSize(14);
@@ -157,7 +156,6 @@ function finalizePDF(doc, invoiceData) {
   doc.save(`invoice_${formattedDateInvoice}.pdf`);
 }
 
-
 window.onload = function () {
-  let invoice = JSON.parse(document.getElementById("invoiceData").value)
-}
+  let invoice = JSON.parse(document.getElementById("invoiceData").value);
+};
