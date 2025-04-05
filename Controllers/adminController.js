@@ -1588,23 +1588,44 @@ const report = async (req, res) => {
             $match: { status: { $nin: ["cancelled", "returned"] } },
           },
           {
-            $group: {
-              _id: {
-                year: { $year: "$createdAt" },
-                week: { $isoWeek: "$createdAt" },
+            $addFields: {
+              weekStart: {
+                $dateTrunc: {
+                  date: {
+                    $dateSubtract: {
+                      startDate: "$createdAt",
+                      unit: "day",
+                      amount: { $subtract: [{ $dayOfWeek: "$createdAt" }, 1] },
+                    },
+                  },
+                  unit: "day",
+                },
               },
+            },
+          },
+          {
+            $addFields: {
+              weekEnd: {
+                $dateAdd: {
+                  startDate: "$weekStart",
+                  unit: "day",
+                  amount: 6,
+                },
+              },
+            },
+          },
+          {
+            $group: {
+              _id: "$weekStart",
               sales: { $sum: "$totalAmount" },
               oders: { $sum: 1 },
               discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
               coupon: {
                 $sum: {
-                  $cond: {
-                    if: { $gt: ["$couponCode", null] },
-                    then: 1,
-                    else: 0,
-                  },
+                  $cond: [{ $gt: ["$couponCode", null] }, 1, 0],
                 },
               },
+              weekEnd: { $first: "$weekEnd" },
             },
           },
           {
@@ -1614,26 +1635,14 @@ const report = async (req, res) => {
                   {
                     $dateToString: {
                       format: "%d - %b - %Y",
-                      date: {
-                        $dateFromParts: {
-                          isoWeekYear: "$_id.year",
-                          isoWeek: "$_id.week",
-                          isoDayOfWeek: 1, // Monday
-                        },
-                      },
+                      date: "$_id",
                     },
                   },
                   " to ",
                   {
                     $dateToString: {
                       format: "%d - %b - %Y",
-                      date: {
-                        $dateFromParts: {
-                          isoWeekYear: "$_id.year",
-                          isoWeek: "$_id.week",
-                          isoDayOfWeek: 7, // Sunday
-                        },
-                      },
+                      date: "$weekEnd",
                     },
                   },
                 ],
@@ -1644,61 +1653,118 @@ const report = async (req, res) => {
               coupon: 1,
             },
           },
-          { $sort: { _id: -1 } },
+          {
+            $sort: { _id: -1 },
+          },
         ]);
+
         data = resultWeek;
       } else if (filter.filter == "Monthly") {
         const resultMonth = await Order.aggregate([
-          { $match: { status: { $nin: ["cancelled", "returned"] } } },
           {
-            $group: {
-              _id: { $dateToString: { format: "%b - %Y", date: "$createdAt" } },
-              sales: { $sum: "$totalAmount" },
-              oders: { $sum: 1 },
-              discount: { $sum: "$discountAmount" ?? 0 },
-              coupon: {
-                $sum: {
-                  $cond: {
-                    if: { $gt: ["$couponCode", null] },
-                    then: 1,
-                    else: 0,
-                  },
+            $match: { status: { $nin: ["cancelled", "returned"] } },
+          },
+          {
+            $addFields: {
+              monthStart: {
+                $dateTrunc: {
+                  date: "$createdAt",
+                  unit: "month",
                 },
               },
             },
           },
-          { $sort: { _id: -1 } },
+          {
+            $group: {
+              _id: {
+                $dateToString: { format: "%b - %Y", date: "$monthStart" },
+              },
+              sales: { $sum: "$totalAmount" },
+              oders: { $sum: 1 },
+              discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
+              coupon: {
+                $sum: {
+                  $cond: [{ $gt: ["$couponCode", null] }, 1, 0],
+                },
+              },
+              monthSortKey: { $first: "$monthStart" },
+            },
+          },
+          {
+            $sort: { monthSortKey: -1 },
+          },
+          {
+            $project: {
+              _id: 1,
+              sales: 1,
+              oders: 1,
+              discount: 1,
+              coupon: 1,
+            },
+          },
         ]);
+
         data = resultMonth;
       } else if (filter.filter == "Yearly") {
         const resultYear = await Order.aggregate([
-          { $match: { status: { $nin: ["cancelled", "returned"] } } },
           {
-            $group: {
-              _id: { $dateToString: { format: "%Y", date: "$createdAt" } },
-              sales: { $sum: "$totalAmount" },
-              oders: { $sum: 1 },
-              discount: { $sum: "$discountAmount" ?? 0 },
-              coupon: {
-                $sum: {
-                  $cond: {
-                    if: { $gt: ["$couponCode", null] },
-                    then: 1,
-                    else: 0,
-                  },
+            $match: { status: { $nin: ["cancelled", "returned"] } },
+          },
+          {
+            $addFields: {
+              yearStart: {
+                $dateTrunc: {
+                  date: "$createdAt",
+                  unit: "year",
                 },
               },
             },
           },
-          { $sort: { _id: -1 } },
+          {
+            $group: {
+              _id: {
+                $dateToString: { format: "%Y", date: "$yearStart" },
+              },
+              sales: { $sum: "$totalAmount" },
+              oders: { $sum: 1 },
+              discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
+              coupon: {
+                $sum: {
+                  $cond: [{ $gt: ["$couponCode", null] }, 1, 0],
+                },
+              },
+              sortKey: { $first: "$yearStart" },
+            },
+          },
+          {
+            $sort: { sortKey: -1 },
+          },
+          {
+            $project: {
+              _id: 1,
+              sales: 1,
+              oders: 1,
+              discount: 1,
+              coupon: 1,
+            },
+          },
         ]);
         data = resultYear;
       } else if (filter.filter == "Custom") {
         filter.dateRange = filter.dateRange.split(" to ");
-        if (filter.dateRange.length == 2) {
-          const startOfDay = new Date(filter.dateRange[0]);
-          const endOfDay = new Date(filter.dateRange[1]);
 
+        const formatDate = (dateStr) => {
+          const date = new Date(dateStr);
+          return new Intl.DateTimeFormat("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }).format(date);
+        };
+
+        if (filter.dateRange.length == 2) {
+          const startOfDay = new Date(`${filter.dateRange[0]}T00:00:00.000Z`);
+          const endOfDay = new Date(`${filter.dateRange[1]}T23:59:59.999Z`);
           const resultCustom = await Order.aggregate([
             {
               $match: {
@@ -1713,7 +1779,7 @@ const report = async (req, res) => {
                 },
                 sales: { $sum: "$totalAmount" },
                 oders: { $sum: 1 },
-                discount: { $sum: "$discountAmount" ?? 0 },
+                discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
                 coupon: {
                   $sum: {
                     $cond: {
@@ -1723,11 +1789,26 @@ const report = async (req, res) => {
                     },
                   },
                 },
+                sortKey: { $min: "$createdAt" },
               },
             },
-            { $sort: { _id: -1 } },
+            {
+              $sort: { sortKey: -1 },
+            },
+            {
+              $project: {
+                _id: 1,
+                sales: 1,
+                oders: 1,
+                discount: 1,
+                coupon: 1,
+              },
+            },
           ]);
-          filter.dateRange = filter.dateRange.join(" to ");
+
+          filter.dateRange = filter.dateRange.map(formatDate).join(" to ");
+
+          // filter.dateRange = filter.dateRange.join(" to ");
           data = resultCustom;
         } else {
           const specificDate = new Date(filter.dateRange[0]);
@@ -1747,7 +1828,7 @@ const report = async (req, res) => {
                 },
                 sales: { $sum: "$totalAmount" },
                 oders: { $sum: 1 },
-                discount: { $sum: "$discountAmount" ?? 0 },
+                discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
                 coupon: {
                   $sum: {
                     $cond: {
@@ -1757,15 +1838,31 @@ const report = async (req, res) => {
                     },
                   },
                 },
+                sortKey: { $min: "$createdAt" },
+              },
+            },
+            { $sort: { sortKey: -1 } },
+            {
+              $project: {
+                _id: 1,
+                sales: 1,
+                oders: 1,
+                discount: 1,
+                coupon: 1,
               },
             },
           ]);
+          filter.dateRange = filter.dateRange.map(formatDate);
           data = resultOneDay;
         }
       }
     } else {
       const resultDay = await Order.aggregate([
-        { $match: { status: { $nin: ["cancelled", "returned"] } } },
+        {
+          $match: {
+            status: { $nin: ["cancelled", "returned"] },
+          },
+        },
         {
           $group: {
             _id: {
@@ -1773,15 +1870,29 @@ const report = async (req, res) => {
             },
             sales: { $sum: "$totalAmount" },
             oders: { $sum: 1 },
-            discount: { $sum: "$discountAmount" ?? 0 },
+            discount: { $sum: { $ifNull: ["$discountAmount", 0] } },
             coupon: {
               $sum: {
-                $cond: { if: { $gt: ["$couponCode", null] }, then: 1, else: 0 },
+                $cond: {
+                  if: { $gt: ["$couponCode", null] },
+                  then: 1,
+                  else: 0,
+                },
               },
             },
+            sortKey: { $min: "$createdAt" },
           },
         },
-        { $sort: { _id: -1 } },
+        { $sort: { sortKey: -1 } },
+        {
+          $project: {
+            _id: 1,
+            sales: 1,
+            oders: 1,
+            discount: 1,
+            coupon: 1,
+          },
+        },
       ]);
       data = resultDay;
       reportData = data;
@@ -1814,7 +1925,8 @@ const download = async (req, res) => {
   try {
     const { format, data } = req.query;
     const sendData = JSON.parse(decodeURIComponent(data));
-
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
     let filePath = "";
 
     if (format === "excel") {
@@ -1840,14 +1952,14 @@ const download = async (req, res) => {
         ]);
       });
 
-      filePath = path.join(__dirname, "../public/files/sales_report.xlsx");
+      filePath = path.join(__dirname, `../public/files/sales_report_${formattedDate}.xlsx`);
       await workbook.xlsx.writeFile(filePath);
     } else {
       const doc = new PDFDocument({ margin: 30 });
       const fontPath = path.join(__dirname, "../public/font/NotoSans.ttf");
       doc.registerFont("NotoSans", fontPath);
       doc.font("NotoSans");
-      filePath = path.join(__dirname, "../public/files/sales_report.pdf");
+      filePath = path.join(__dirname, `../public/files/sales_report_${formattedDate}.pdf`);
 
       doc.pipe(fs.createWriteStream(filePath));
 

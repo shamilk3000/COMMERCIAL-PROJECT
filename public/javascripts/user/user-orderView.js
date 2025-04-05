@@ -106,6 +106,9 @@ async function generateInvoice() {
 }
 
 function finalizePDF(doc, invoiceData) {
+  
+  const today = new Date();
+  const formattedDateInvoice = today.toISOString().split("T")[0];
  
   doc.setFontSize(18);
   doc.text(invoiceData.shopName, 50, 20);
@@ -151,8 +154,7 @@ function finalizePDF(doc, invoiceData) {
   doc.text("Grand Total:", 120, y + 25);
   doc.text(`₹${total}`, 160, y + 25);
 
-
-  doc.save("invoice.pdf"); 
+  doc.save(`invoice_${formattedDateInvoice}.pdf`);
 }
 
 
